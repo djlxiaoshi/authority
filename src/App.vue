@@ -18,6 +18,9 @@
 
 <script type="text/ecmascript-6">
   import Chart from './components/Chart';
+  import 'bootstrap/dist/css/bootstrap-theme.css';
+  import 'bootstrap/dist/css/bootstrap.css';
+
   export default {
     components: {
       Chart

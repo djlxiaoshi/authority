@@ -26,9 +26,8 @@
         </div>
       </form>
     </div>
-    <div class="select-application">
-      <span class="">操作权限</span>
-      <a class="please-select" href="javascript:void(0)">--请选择--</a>
+    <div class="select-auth-wrap">
+      <Select-auth></Select-auth>
     </div>
 
     <div role="dialog" id="myModal">
@@ -51,11 +50,15 @@
   import 'bootstrap/dist/css/bootstrap.css';
   import $ from 'jquery/dist/jquery.min';
   import 'bootstrap/dist/js/bootstrap';
+  import SelectAuth from 'components/SelectAuth/SelectAuth';
   export default {
     data () {
       return {
         moreContent: false
       };
+    },
+    components: {
+      SelectAuth
     },
     methods: {
       showMore () {
@@ -78,14 +81,6 @@
     position: relative;
     .more-content
       display: inline-block
-    .select-application
-      .please-select
-        display: inline-block
-        width: 200px
-        text-align: center
-        color:black
-        &:hover
-          text-decoration :none
   #myModal
     display: none
     position: fixed
