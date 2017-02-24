@@ -5,6 +5,8 @@ import MyAuto from 'components/MyAuto/MyAuto';
 import Approval from 'components/Approval/Approval';
 import Management from 'components/Management/Management';
 
+import SelectGame from 'components/SelectGame/SelectGame';
+
 Vue.use(Router);
 
 export default new Router({
@@ -12,7 +14,11 @@ export default new Router({
     {
       path: '/',
       name: 'Application',
-      component: Application
+      component: Application,
+      children: [{
+        path: '/game',
+        component: SelectGame
+      }]
     },
     {
       path: '/myauto',

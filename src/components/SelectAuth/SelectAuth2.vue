@@ -17,6 +17,12 @@
             <li><router-link to="/">请选择终端</router-link></li>
             <li><router-link to="/">请选择应用包</router-link></li>
             <li><router-link to="/">请选择APPID</router-link></li>
+
+            <!--<li><a href="#">请选择平台</a></li>-->
+            <!--<li><a href="#">请选择大厅</a></li>-->
+            <!--<li><a href="#">请选择终端</a></li>-->
+            <!--<li><a href="#">请选择应用包</a></li>-->
+            <!--<li><a href="#">请选择APPID</a></li>-->
           </ul>
         </div>
         <div class="select-right">
@@ -26,9 +32,20 @@
             <input type="text" placeholder="Q:请输入关键词" class="search">
           </form>
           <div class="scroll-right-wrap" id="scroll-right-wrap">
-            <keep-alive>
+            <ul class="scroll-inner">
+              <!--<li><label ><input type="checkbox">所有大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">大连大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">自贡大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">四川大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">济南大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">昆明大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">营口大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">南充大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">湖北大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">湖南大厅</label></li>-->
+              <!--<li><label ><input type="checkbox">深圳大厅</label></li>-->
               <router-view></router-view>
-            </keep-alive>
+            </ul>
           </div>
         </div>
       </div>
@@ -50,14 +67,10 @@
       let leftScroll = new BScroll('#scroll-left-wrap', {
         click: true
       });
-
       /* eslint-disable no-unused-vars */
-      this.$nextTick(function () {
-        this.scroll = new BScroll('#scroll-wrap', {
-          click: true
-        });
-        console.log(1);
-      });
+//      let rightScroll = new BScroll('#scroll-right-wrap', {
+//        click: true
+//      });
     }
   };
 </script>
