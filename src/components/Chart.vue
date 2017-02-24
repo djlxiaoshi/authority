@@ -32,7 +32,6 @@
       </tr>
     </table>
     <div class="btn btn-danger">Bootstrap测试按钮</div>
-    <router-view></router-view>
   </div>
 </template>
 
