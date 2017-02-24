@@ -1,5 +1,6 @@
 <template>
     <div id=''>
+      我的权限页面
     </div>
 </template>
 
