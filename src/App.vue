@@ -1,24 +1,28 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <h1>DJLxiaoshi</h1>
+    <h1 class="btn btn-danger active">DJLxiaoshi</h1>
     <router-view></router-view>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'app'
-}
+<script type="text/ecmascript-6">
+  import 'bootstrap/dist/css/bootstrap.css'
+  import 'bootstrap/dist/css/bootstrap-theme.css'
+  import $ from 'jquery/dist/jquery'
+  console.log($)
+  export default {
+    name: 'app'
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-#app
-  font-family: 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
-  text-align: center
-  color: #2c3e50
-  margin-top: 60px
+  #app
+    font-family: 'Avenir', Helvetica, Arial, sans-serif
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    text-align: center
+    color: #2c3e50
+    margin-top: 60px
 
 </style>
