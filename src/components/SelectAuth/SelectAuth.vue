@@ -12,11 +12,11 @@
         <div class="scroll-left-wrap" id="scroll-left-wrap">
           <ul class="scroll-inner">
             <li><router-link to="/game">请选择游戏</router-link></li>
-            <li><router-link to="/">请选择平台</router-link></li>
-            <li><router-link to="/">请选择大厅</router-link></li>
-            <li><router-link to="/">请选择终端</router-link></li>
-            <li><router-link to="/">请选择应用包</router-link></li>
-            <li><router-link to="/">请选择APPID</router-link></li>
+            <li><router-link to="/platform">请选择平台</router-link></li>
+            <li><router-link to="/hall">请选择大厅</router-link></li>
+            <li><router-link to="/terminal">请选择终端</router-link></li>
+            <li><router-link to="/appPackage">请选择应用包</router-link></li>
+            <li><router-link to="/appid">请选择APPID</router-link></li>
           </ul>
         </div>
         <div class="select-right">
@@ -49,14 +49,6 @@
       /* eslint-disable no-unused-vars */
       let leftScroll = new BScroll('#scroll-left-wrap', {
         click: true
-      });
-
-      /* eslint-disable no-unused-vars */
-      this.$nextTick(function () {
-        this.scroll = new BScroll('#scroll-wrap', {
-          click: true
-        });
-        console.log(1);
       });
     }
   };
@@ -105,6 +97,5 @@
             text-indent :2rem
           .scroll-right-wrap
             width: 200px
-            overflow: hidden
-
+            height: 120px
 </style>

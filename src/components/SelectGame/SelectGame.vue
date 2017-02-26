@@ -1,6 +1,6 @@
 <template>
-  <div class="scroll-wrap" id="scroll-wrap">
-    <ul class="inner" v-for="item in gameType">
+  <div class="game-list">
+    <ul v-for="item in gameType">
       <li><label><input type="checkbox">{{item}}</label></li>
     </ul>
   </div>
@@ -20,7 +20,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  .scroll-wrap
+  .game-list
     height: 100%
-    overflow: hidden
+    overflow: auto
 </style>

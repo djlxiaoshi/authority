@@ -66,11 +66,11 @@
       },
       showPrompt ($event) {
         if ($event.target.checked) {
-          $('#myModal').show();
+          $('#myModal').fadeIn(300);
         }
       },
       hidePrompt () {
-        $('#myModal').hide();
+        $('#myModal').fadeOut(200);
       }
     }
   };
