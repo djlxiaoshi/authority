@@ -1,8 +1,8 @@
 <template>
   <div class="game-list">
-    <ul v-for="item in gameType">
-      <li><label><input type="checkbox">{{item}}</label></li>
-    </ul>
+    <template v-for="item in gameType">
+      <div><el-checkbox >{{item}}</el-checkbox></div>
+    </template>
   </div>
 </template>
 

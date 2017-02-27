@@ -1,8 +1,8 @@
 <template>
   <div class="platform-list">
-    <ul  v-for="item in platformType">
-      <li><label><input type="checkbox">{{item}}</label></li>
-    </ul>
+    <template  v-for="item in platformType">
+      <div><el-checkbox >{{item}}</el-checkbox></div>
+    </template>
   </div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">

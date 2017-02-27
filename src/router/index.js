@@ -42,7 +42,7 @@ export default new Router({
           component: SelectAppPackage
         },
         {
-          path: 'appid',
+          path: '/appid',
           component: SelectAPPID
         }
       ]

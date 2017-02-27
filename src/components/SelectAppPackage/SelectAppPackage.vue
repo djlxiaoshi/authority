@@ -1,8 +1,8 @@
 <template>
     <div class="app-package-list">
-        <ul  v-for="item in appPackageType">
-            <li><label><input type="checkbox">{{item}}</label></li>
-        </ul>
+        <template  v-for="item in appPackageType">
+          <div><el-checkbox >{{item}}</el-checkbox></div>
+        </template>
     </div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">

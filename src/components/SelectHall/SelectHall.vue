@@ -1,8 +1,8 @@
 <template>
   <div class="hall-list">
-    <ul v-for="item in hallType">
-      <li><label><input type="checkbox">{{item}}</label></li>
-    </ul>
+    <template v-for="item in hallType">
+      <div><el-checkbox >{{item}}</el-checkbox></div>
+    </template>
   </div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">

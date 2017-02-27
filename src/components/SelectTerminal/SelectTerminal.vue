@@ -1,8 +1,8 @@
 <template>
   <div class="terminal-list">
-    <ul  v-for="item in terminalType">
-      <li><label><input type="checkbox">{{item}}</label></li>
-    </ul>
+    <template  v-for="item in terminalType">
+      <div><el-checkbox >{{item}}</el-checkbox></div>
+    </template>
   </div>
 </template>
 <style lang="stylus" rel="stylesheet/stylus">
