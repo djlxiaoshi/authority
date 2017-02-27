@@ -17,7 +17,7 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'Application',
       component: Application,
       children: [
@@ -62,5 +62,6 @@ export default new Router({
       name: 'Management',
       component: Management
     }
-  ]
+  ],
+  linkActiveClass: 'active'
 });

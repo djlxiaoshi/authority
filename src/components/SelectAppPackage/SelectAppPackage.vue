@@ -14,7 +14,7 @@
     export default{
       data () {
         return {
-          appPackageType: ['应用包1', '应用包2', '应用包3', '应用包4', '应用包5', '应用包6']
+          appPackageType: ['所有应用包', '360', '新浪', '腾讯', '应用包5', '应用包6']
         };
       }
     };

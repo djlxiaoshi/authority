@@ -3,28 +3,23 @@
     <h3 class="authority-center">权限中心</h3>
     <div class="router">
       <ul class="router-left">
-        <li><router-link to="/">权限申请</router-link></li>
-        <li><router-link to="myauto">我的权限</router-link></li>
-        <li><router-link to="approval">我的审批</router-link></li>
-        <li><router-link to="management">权限管理</router-link></li>
+        <li><router-link to="/home">权限申请</router-link></li>
+        <li><router-link to="/myauto">我的权限</router-link></li>
+        <li><router-link to="/approval">我的审批</router-link></li>
+        <li><router-link to="/management">权限管理</router-link></li>
       </ul>
       <div class="router-right">
         <router-view></router-view>
       </div>
     </div>
-    <Chart></Chart>
   </ul>
 </template>
 
 <script type="text/ecmascript-6">
-  import Chart from './components/Chart';
   import 'bootstrap/dist/css/bootstrap-theme.css';
   import 'bootstrap/dist/css/bootstrap.css';
 
   export default {
-    components: {
-      Chart
-    }
   };
 </script>
 
@@ -43,6 +38,8 @@
         flex:0 0 200px
         height:100%;
         background :yellow
+        .active
+          background lightcoral
         li
           text-align: center
           line-height: 2rem

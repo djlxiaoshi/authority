@@ -14,7 +14,7 @@
   export default{
     data () {
       return {
-        terminalType: ['终端一', '终端二', '终端三', '终端四', '终端五', '终端六', '终端七', '终端八', '终端九']
+        terminalType: ['所有终端', 'IOS', 'PC', 'ANDRIOD']
       };
     }
   };

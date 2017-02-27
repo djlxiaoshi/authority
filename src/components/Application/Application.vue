@@ -17,7 +17,7 @@
         <label><input type="checkbox">订单查询</label>
         <label><input type="checkbox">欺诈订单</label>
         <label><input type="checkbox">统计信息</label>
-        <a href="#" @click="showMore">》<span>更多内容</span></a>
+        <a href="javascript:void(0)" @click="showMore">》<span>更多内容</span></a>
         <div class="more-content" v-if="moreContent">
           <label><input type="checkbox" @click="showPrompt">产品配置</label>
           <label><input type="checkbox" @click="showPrompt">收入汇总</label>
@@ -30,31 +30,51 @@
       <Select-auth></Select-auth>
     </div>
 
-    <div role="dialog" id="myModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <p>您所申请的内容，将会转到对应的业务审核人审核，如果您申请的内容与自己的工作职责不符，将不会予以通过；请慎重申请，谢谢!</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="hidePrompt">确定</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
+    <el-table :data="tableData" border style="width: 100%">
+      <el-table-column label="游戏" prop="game" align="center"></el-table-column>
+      <el-table-column label="平台" prop="platform" align="center"></el-table-column>
+      <el-table-column label="大厅" prop="hall" align="center"></el-table-column>
+      <el-table-column label="终端" prop="terminal" align="center"></el-table-column>
+      <el-table-column label="应用包" prop="appPackage" align="center"></el-table-column>
+      <el-table-column label="APPID应用" prop="APPID" align="center"></el-table-column>
+      <el-table-column label="权限内容" align="center">
+        <el-table-column label="权限1" align="center">
+          <template scope="scope">
+            <el-checkbox v-model="checked">发货退款</el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="权限2" align="center">
+          <template scope="scope">
+            <el-checkbox v-model="checked">报警设置</el-checkbox>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
+        <template scope="scope">
+          <el-button size="small" type="danger">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import 'bootstrap/dist/css/bootstrap.css';
-  import $ from 'jquery/dist/jquery.min';
-  import 'bootstrap/dist/js/bootstrap';
   import SelectAuth from 'components/SelectAuth/SelectAuth';
   export default {
     data () {
       return {
-        moreContent: false
+        moreContent: false,
+        tableData: [{
+          game: '地方棋牌',
+          platform: '四川',
+          hall: '全部',
+          terminal: '全部',
+          appPackage: '全部',
+          APPID: '全部',
+          auth: [{name: 'd', age: 20}],
+          assessor: 'DJLXS'
+        }]
       };
     },
     components: {
@@ -66,11 +86,10 @@
       },
       showPrompt ($event) {
         if ($event.target.checked) {
-          $('#myModal').fadeIn(300);
+          this.$alert('您所申请的内容，将会转到对应的业务审核人审核，如果您申请的内容与自己的工作职责不符，将不会予以通过；请慎重申请，谢谢', '提示', {
+            confirmButtonText: '确定'
+          });
         }
-      },
-      hidePrompt () {
-        $('#myModal').fadeOut(200);
       }
     }
   };
@@ -81,21 +100,22 @@
     position: relative;
     .more-content
       display: inline-block
+
   #myModal
     display: none
     position: fixed
-    top:0
-    bottom:0
-    left:0
-    right:0
-    z-index :50
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    z-index: 50
     background: rgba(128, 128, 128, 0.7)
     .modal-dialog
       position: absolute
-      top:0
-      bottom:0
-      left:0
-      right:0
-      margin:auto
+      top: 0
+      bottom: 0
+      left: 0
+      right: 0
+      margin: auto
 
 </style>

@@ -1,11 +1,12 @@
 <template>
   <div class="select-application">
     <span class="">操作权限</span>
-    <a class="please-select" href="javascript:void(0)" @click="selectBox">--请选择--</a>
-    <div class="select-box-wrap">
+    <el-button type="text" @click="toggleSelected" class="please-select">--请选择-- </el-button>
+    <div class="select-box-wrap" id="select-box-wrap">
       <h4 class="box-name">应用选择器
         <div class="btn-group btn-group-xs">
-          <a href="javascript:void (0)" class="btn btn-primary ">确定</a><a href="javascript:void (0)" class="btn btn-danger">置空</a>
+          <el-button type="primary" size="mini">确定</el-button>
+          <el-button type="warning" size="mini">置空</el-button>
         </div>
       </h4>
       <div class="box-body">
@@ -39,10 +40,11 @@
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
+  import $ from 'jquery/dist/jquery.min';
   export default {
     methods: {
-      selectBox () {
-        // todo
+      toggleSelected () {
+        $('#select-box-wrap').toggle(300);
       }
     },
     mounted () {
@@ -67,6 +69,7 @@
       &:hover
         text-decoration :none
     .select-box-wrap
+      display: none
       background :#fff
       .box-name
         font-weight:700
@@ -96,6 +99,5 @@
             border:1px solid #000000
             text-indent :2rem
           .scroll-right-wrap
-            width: 200px
             height: 120px
 </style>
