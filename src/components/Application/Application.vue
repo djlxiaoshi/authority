@@ -37,7 +37,7 @@
     </div>
 
     <div class="select-auth-wrap">
-      <Select-auth></Select-auth>
+      <Select-auth parent-router="home"></Select-auth>
     </div>
 
     <!--添加权限-->

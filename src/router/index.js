@@ -22,27 +22,28 @@ export default new Router({
       component: Application,
       children: [
         {
-          path: '/game',
+          path: '/home/game',
+          name: 'game',
           component: SelectGame
         },
         {
-          path: '/platform',
+          path: '/home/platform',
           component: SelectPlatform
         },
         {
-          path: '/hall',
+          path: '/home/hall',
           component: SelectHall
         },
         {
-          path: '/terminal',
+          path: '/home/terminal',
           component: SelectTerminal
         },
         {
-          path: '/appPackage',
+          path: '/home/appPackage',
           component: SelectAppPackage
         },
         {
-          path: '/appid',
+          path: '/home/appid',
           component: SelectAPPID
         }
       ]
@@ -60,7 +61,33 @@ export default new Router({
     {
       path: '/management',
       name: 'Management',
-      component: Management
+      component: Management,
+      children: [
+        {
+          path: '/management/game',
+          component: SelectGame
+        },
+        {
+          path: '/management/platform',
+          component: SelectPlatform
+        },
+        {
+          path: '/management/hall',
+          component: SelectHall
+        },
+        {
+          path: '/management/terminal',
+          component: SelectTerminal
+        },
+        {
+          path: '/management/appPackage',
+          component: SelectAppPackage
+        },
+        {
+          path: '/management/appid',
+          component: SelectAPPID
+        }
+      ]
     }
   ],
   linkActiveClass: 'active'
