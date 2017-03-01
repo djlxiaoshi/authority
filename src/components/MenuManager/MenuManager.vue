@@ -1,14 +1,21 @@
 <template>
     <div class='menu-manager-wrap'>
-      <el-button type="success" class="go-back" size="small" @click="goBack">◁</el-button>
-      <span>角色：产品/运营人员</span>
-      <div class="operate-wrap">
-        <el-cascader placeholder="试试搜索：指南" :options="options" filterable change-on-select></el-cascader>
-        <el-button type="primary">查询</el-button>
-        <el-button type="primary" size="small">批量添加</el-button>
-        <el-button type="warning" size="small">批量取消</el-button>
-        <el-checkbox>全选</el-checkbox>
+      <div class="menu-manager-head">
+        <div class="operate-role">
+          <el-button type="success" class="go-back" size="small" @click="goBack">◁</el-button>
+          <span>角色：产品/运营人员</span>
+        </div>
+        <div class="operate-wrap">
+          <el-cascader placeholder="试试搜索：指南" :options="options" filterable change-on-select style="vertical-align: middle"></el-cascader>
+          <el-button type="primary" style="vertical-align: middle">查询</el-button>
+          <div class="batch-operation clearfix" style="vertical-align: middle">
+            <el-button type="primary" size="small">批量添加</el-button>
+            <el-button type="warning" size="small">批量取消</el-button>
+            <el-checkbox>全选</el-checkbox>
+          </div>
+        </div>
       </div>
+
       <div class="show-wrap">
         <el-table :data="memberManData" style="width: 100%" border>
           <el-table-column label="ID" align="center" prop="id"  width="180" ></el-table-column>
@@ -248,14 +255,12 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/css/common.styl'
   .menu-manager-wrap
-    position: absolute
-    top:0
-    bottom: 0
-    left:0
-    right: 0
-    z-index: 50
-    background: #ffffff
+    .operate-wrap
+      margin: 30px 0
+      .batch-operation
+        float: right
     .go-back
       display: inline-block
 </style>

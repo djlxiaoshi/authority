@@ -3,9 +3,9 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="角色管理" name="first">
         <div class="role-manage-head">
-          角色:
+          <span class="v-align-m">角色:</span>
           <el-input placeholder="请输入角色" class="role-input"></el-input>
-          成员:
+          <span class="v-align-m">成员:</span>
           <el-input placeholder="请输入成员名称" class="member-input"></el-input>
           <el-button type="primary">查询</el-button>
           <el-button type="primary" size="small" class="clearfix add-role" @click="showAddRole">+添加角色</el-button>
@@ -53,23 +53,23 @@
       </el-tab-pane>
     </el-tabs>
 
-    <div class="menu-manager-comp-wrap" v-show="showMenuManagerFlag">
+    <div class="menu-manager-comp-wrap container" v-show="showMenuManagerFlag">
       <MenuManager v-on:hideMenuManager="hideMenuManager"></MenuManager>
     </div>
 
-    <div class="member-manager-comp-wrap" v-show="showMemberManaFlag">
+    <div class="member-manager-comp-wrap container" v-show="showMemberManaFlag">
       <MemberManager v-on:hideMemberMana="hideMemberMana"></MemberManager>
     </div>
 
-    <div class="add-role-comp-wrap" v-show="showAddRoleFlag">
+    <div class="add-role-comp-wrap container" v-show="showAddRoleFlag">
       <AddRole @hideAddRole="hideAddRole"></AddRole>
     </div>
 
-    <div class="view-auth-comp-wrap" v-show="showAuthListFlag">
+    <div class="view-auth-comp-wrap container" v-show="showAuthListFlag">
       <ViewAuth @hideAuthList="hideAuthList"></ViewAuth>
     </div>
 
-    <div class="operate-auth-comp-wrap" v-show="showOperateAuthFlag">
+    <div class="operate-auth-comp-wrap container" v-show="showOperateAuthFlag">
       <OperateAuth @hideOperateAuth="hideOperateAuth"></OperateAuth>
     </div>
   </div>
@@ -172,21 +172,14 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/css/common.styl"
   .auth-manage
-    position: relative
     .role-manage-head
       margin-bottom: 20px
+      vertical-align :middle
       .role-input, .member-input
-        width: 200px
         display: inline-block
         margin-right: 30px
+        width: 200px
+        vertical-align :middle
       .add-role
         float: right
-    .add-role-comp-wrap, .view-auth-comp-wrap, .operate-auth-comp-wrap
-      position: absolute
-      top: 0
-      bottom: 0
-      left: 0
-      right: 0
-      z-index: 50
-      background: #ffffff
 </style>

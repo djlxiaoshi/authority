@@ -1,24 +1,26 @@
 <template>
-  <div class='my-appoval'>
+  <div class='my-appoval container'>
     <h4>审批列表</h4>
     <hr>
     <el-tabs v-model="activeName">
-      <el-checkbox>全选</el-checkbox>
-      <el-button type="primary" size="small">批量通过</el-button>
-      <el-button type="warning" size="small">批量驳回</el-button>
+      <div class="batch-operate">
+        <el-checkbox>全选</el-checkbox>
+        <el-button type="primary" size="small">批量通过</el-button>
+        <el-button type="warning" size="small" @click="reject">批量驳回</el-button>
+      </div>
       <div class="search-input clearfix" size="small">
         <el-input placeholder="请输入关键字" icon="search"></el-input>
       </div>
 
       <el-tab-pane label="用户管理" name="first">
         <div class="my-auth-wrap">
-          <el-table :data="viewData" border style="width: 100%">
-            <el-table-column label="选项" align="center">
+          <el-table :data="viewData" border style="width: 100%" resizable="true" border>
+            <el-table-column label="选项" align="center" width="90">
               <template scope="scope">
                 <el-checkbox></el-checkbox>
               </template>
             </el-table-column>
-            <el-table-column label="申请人" prop="applicant" align="center"></el-table-column>
+            <el-table-column label="申请人" prop="applicant" align="center" width="120"></el-table-column>
             <el-table-column label="申请人角色" prop="role" align="center"></el-table-column>
             <el-table-column label="所属部门" prop="department" align="center"></el-table-column>
             <el-table-column label="查看权限" prop="viewAuth" align="center">
@@ -43,7 +45,7 @@
       <el-tab-pane label="配置管理" name="second">
         <div class="operate-auth">
           <el-table :data="operateAuthData" border style="width: 100%">
-            <el-table-column label="选项" align="center" width="40">
+            <el-table-column label="选项" align="center" width="50">
               <template scope="scope">
                 <el-checkbox></el-checkbox>
               </template>
@@ -71,7 +73,7 @@
             </el-table-column>
             <el-table-column label="申请时间" prop="applicationTime" align="center"></el-table-column>
             <el-table-column label="申请理由" prop="applicateReason" align="center"></el-table-column>
-            <el-table-column label="操作" prop="operation" align="center">
+            <el-table-column label="操作" prop="operation" align="center" width="180">
               <template scope="scope">
                 <div style="display: inline-block;vertical-align: middle">
                 <el-button type="primary" size="mini">审核通过</el-button>
@@ -118,6 +120,19 @@
           applicateReason: '想做更好'
         }]
       };
+    },
+    methods: {
+      reject () {
+        this.$confirm('确定删除当前项吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(function () {
+          console.log('批量驳回');
+        }).catch(function () {
+          console.log('放弃操作');
+        });
+      }
     }
   };
 </script>
@@ -125,6 +140,8 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import '../../common/css/common.styl'
   .my-appoval
+    .batch-operate
+      display: inline-block
     .search-input
       width: 300px
       float: right

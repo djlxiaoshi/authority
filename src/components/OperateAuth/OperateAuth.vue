@@ -135,8 +135,6 @@
     .batch-oprate, .search-input
       display: inline-block
       vertical-align :middle
-    .batch-oprate
-      margin-top: 20px
     .search-input
       float: right
       margin-right: 30px

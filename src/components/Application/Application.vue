@@ -31,8 +31,6 @@
           <el-button type="text" @click="showMore" v-if="showFlag">更多内容</el-button>
           <el-button type="text" @click="showMore" v-else>收起</el-button>
         </div>
-
-
       </form>
     </div>
 
@@ -158,18 +156,22 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   .auth-application
-    position: relative;
-    margin: 0 20px
+    width: 1200px
+    margin: 0 auto
     h5
       margin: 10px 0
+      font-weight:700
     .applicant-msg, .authority, .view-content
       margin: 10px 0 20px 0
+    .authority
+      .authority-text
+        line-height :1.5rem
     .view-content
       .more-content
         display: inline-block
     .select-auth-wrap, .add-auth-wrap, .own-auth-wrap, .application-reason-wrap, .bottom-btn-wrap
       margin-bottom: 50px
     .bottom-btn-wrap
-      margin: 0 auto
+      text-align: center
 
 </style>

@@ -91,17 +91,17 @@
             <el-table-column label="当前处理人" prop="assessor" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
               <template scope="scope">
-                <el-button type="danger" size="mini">撤回申请</el-button>
+                <el-button type="danger" size="mini" @click="withdraw">撤回申请</el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
       </el-tab-pane>
       <el-tab-pane label="被驳回权限" name="third">
-        <div class="search-input clearfix">
-          <el-input placeholder="请输入关键字" icon="search" size="small"></el-input>
+        <div class="clearfix">
+          <el-input placeholder="请输入关键字" icon="search" size="small" class="search-input"></el-input>
         </div>
-        <div class="my-auth-wrap">
+        <div class="my-auth-table">
           <el-table :data="tableData" border style="width: 100%">
             <el-table-column label="游戏" prop="game" align="center"></el-table-column>
             <el-table-column label="平台" prop="platform" align="center"></el-table-column>
@@ -169,12 +169,23 @@
     methods: {
       handleClick (tab, event) {
         console.log(tab, event);
+      },
+      withdraw () {
+        this.$confirm('确定删除当前项吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(function () {
+          console.log('确定撤销');
+        }).catch(function () {
+          console.log('放弃操作');
+        });
       }
     }
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">\
+<style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/css/common.styl"
   .my-auth-wrap
     .own-auth
