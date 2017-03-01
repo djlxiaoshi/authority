@@ -22,12 +22,12 @@
         <div class="right-part">
           <div class="data-list">
             <ul v-show="changeFlag === 1">
-              <el-checkbox class="">全选/全不选</el-checkbox>
+              <el-checkbox class="" @click="selectGame">全选/全不选</el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search"></el-input>
               </div>
               <li v-for="item in gameType">
-                <el-checkbox>{{item}}</el-checkbox>
+                <el-checkbox v-model="gameTypeChecked" :value="item">{{item}}</el-checkbox>
               </li>
             </ul>
 
@@ -99,8 +99,14 @@
         platformType: ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'],
         hallType: ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'],
         terminalType: ['所有终端', 'IOS', 'PC', 'ANDRIOD'],
-        appPackageType: ['所有应用包', '360', '新浪', '腾讯', '应用包5', '应用包6'],
-        appidType: ['所有APPID', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）']
+        appPackageType: ['所有应用包', '360', '新浪', '腾讯'],
+        appidType: ['所有APPID', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）'],
+        gameTypeChecked: [],
+        platformTypeChecked: [],
+        hallTypeChecked: [],
+        terminalTypeChecked: [],
+        appPackageTypeChecked: [],
+        appidTypeChecked: []
       };
     },
     methods: {
@@ -111,6 +117,12 @@
         $event.target.style.background = 'lightgreeen';
         this.changeFlag = num;
         console.log(this.changeFlag);
+      },
+      selectGame () {
+        this.gameTypeChecked = [];
+        this.gameType.forEach(function (item) {
+          this.gameTypeChecked.push(item);
+        });
       }
     },
     props: ['parentRouter']
