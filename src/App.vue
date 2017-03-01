@@ -4,9 +4,14 @@
     <div class="app-body">
       <div  class="app-body-left">
         <div class="router-wrap">
+
           <router-link to="/home" class="router-item">权限申请</router-link>
           <router-link to="/myauto" class="router-item">我的权限</router-link>
-          <router-link to="/approval" class="router-item">我的审批</router-link>
+
+            <router-link to="/approval" class="router-item">
+              <el-badge :value="20" :max="10" class="item">我的审批</el-badge>
+            </router-link>
+
           <router-link to="/management" class="router-item">权限管理</router-link>
         </div>
       </div>

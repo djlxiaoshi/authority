@@ -12,7 +12,7 @@
         <el-input placeholder="请输入关键字" icon="search"></el-input>
       </div>
 
-      <el-tab-pane label="用户管理" name="first">
+      <el-tab-pane label="查看内容" name="first">
         <div class="my-auth-wrap">
           <el-table :data="viewData" border style="width: 100%" resizable="true" border>
             <el-table-column label="选项" align="center" width="90">
@@ -42,7 +42,7 @@
           </el-table>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="配置管理" name="second">
+      <el-tab-pane label="操作权限" name="second">
         <div class="operate-auth">
           <el-table :data="operateAuthData" border style="width: 100%">
             <el-table-column label="选项" align="center" width="50">

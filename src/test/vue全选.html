@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue实现全选</title>
+</head>
+<body>
+  <div id="app">
+    <input type="checkbox" @click="selectAll"> 全选
+    <input type="checkbox" @click="selectNone"> 全不选
+    <template v-for="item in serviceData">
+      <label >
+        <input type="checkbox" :value="item" v-model="checkedNames">{{item}}
+      </label>
+    </template>
+
+    <br>
+    <span>Checked names: {{ checkedNames }}</span>
+  </div>
+  <script src="https://unpkg.com/vue@2.2.1/dist/vue.js"></script>
+  <script >
+    new Vue({
+      el: '#app',
+      data: {
+        checkedNames: [],
+        serviceData:['数据1','数据2','数据3','数据4','数据5','数据6']
+      },
+      methods:{
+        selectAll: function () {
+            var _this = this;
+          _this.checkedNames=[];
+          _this.serviceData.forEach(function (item) {
+              console.log(_this.checkedNames)
+            _this.checkedNames.push(item);
+          })
+        },
+        selectNone: function () {
+          this.checkedNames=[];
+        }
+      }
+    })
+  </script>
+</body>
+</html>

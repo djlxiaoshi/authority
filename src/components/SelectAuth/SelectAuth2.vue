@@ -1,52 +1,87 @@
 <template>
   <div class="select-application">
     <span class="">操作权限</span>
-    <a class="please-select" href="javascript:void(0)" @click="selectBox">--请选择--</a>
-    <div class="select-box-wrap">
-      <h4 class="box-name">应用选择器
-        <div class="btn-group btn-group-xs">
-          <a href="javascript:void (0)" class="btn btn-primary ">确定</a><a href="javascript:void (0)" class="btn btn-danger">置空</a>
+    <el-button @click="toggleSelected" class="please-select">--请选择--</el-button>
+    <div class="select-box-wrap" id="select-box-wrap" v-show="showSelectAuthBox">
+      <div class="box-header clearfix">
+        <h5 class="box-title">应用选择器</h5>
+        <div class="btn-wrap">
+          <el-button type="primary" size="mini">确定</el-button>
+          <el-button type="warning" size="mini">置空</el-button>
         </div>
-      </h4>
+      </div>
       <div class="box-body">
-        <div class="scroll-left-wrap" id="scroll-left-wrap">
-          <ul class="scroll-inner">
-            <li><router-link to="/game">请选择游戏</router-link></li>
-            <li><router-link to="/">请选择平台</router-link></li>
-            <li><router-link to="/">请选择大厅</router-link></li>
-            <li><router-link to="/">请选择终端</router-link></li>
-            <li><router-link to="/">请选择应用包</router-link></li>
-            <li><router-link to="/">请选择APPID</router-link></li>
+        <ul class="left-part">
+          <li @click="change($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择游戏</a></li>
+          <li @click="change($event,2)" :class="{active: changeFlag === 2}"><a href="javascript:void(0)">请选择平台</a></li>
+          <li @click="change($event,3)" :class="{active: changeFlag === 3}"><a href="javascript:void(0)">请选择大厅</a></li>
+          <li @click="change($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择终端</a></li>
+          <li @click="change($event,5)" :class="{active: changeFlag === 5}"><a href="javascript:void(0)">请选择应用包</a></li>
+          <li @click="change($event,6)" :class="{active: changeFlag === 6}"><a href="javascript:void(0)">请选择APPID</a></li>
+        </ul>
+        <div class="right-part">
+          <div class="data-list">
+            <ul v-show="changeFlag === 1">
+              <el-checkbox class="">全选/全不选</el-checkbox>
+              <div class="select-auth-input">
+                <el-input placeholder="请输入关键词" icon="search"></el-input>
+              </div>
+              <li v-for="item in gameType">
+                <el-checkbox>{{item}}</el-checkbox>
+              </li>
+            </ul>
 
-            <!--<li><a href="#">请选择平台</a></li>-->
-            <!--<li><a href="#">请选择大厅</a></li>-->
-            <!--<li><a href="#">请选择终端</a></li>-->
-            <!--<li><a href="#">请选择应用包</a></li>-->
-            <!--<li><a href="#">请选择APPID</a></li>-->
-          </ul>
-        </div>
-        <div class="select-right">
-          <form action="">
-            <label ><input type="checkbox">全选/全部选</label>
-            <br>
-            <input type="text" placeholder="Q:请输入关键词" class="search">
-          </form>
-          <div class="scroll-right-wrap" id="scroll-right-wrap">
-            <ul class="scroll-inner">
-              <!--<li><label ><input type="checkbox">所有大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">大连大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">自贡大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">四川大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">济南大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">昆明大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">营口大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">南充大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">湖北大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">湖南大厅</label></li>-->
-              <!--<li><label ><input type="checkbox">深圳大厅</label></li>-->
-              <router-view></router-view>
+            <ul v-show="changeFlag === 2">
+              <el-checkbox class="">全选/全不选</el-checkbox>
+              <div class="select-auth-input">
+                <el-input placeholder="请输入关键词" icon="search"></el-input>
+              </div>
+              <li v-for="item in platformType">
+                <el-checkbox>{{item}}</el-checkbox>
+              </li>
+            </ul>
+
+            <ul v-show="changeFlag === 3">
+              <el-checkbox class="">全选/全不选</el-checkbox>
+              <div class="select-auth-input">
+                <el-input placeholder="请输入关键词" icon="search"></el-input>
+              </div>
+              <li v-for="item in hallType">
+                <el-checkbox>{{item}}</el-checkbox>
+              </li>
+            </ul>
+
+            <ul v-show="changeFlag === 4">
+              <el-checkbox class="">全选/全不选</el-checkbox>
+              <div class="select-auth-input">
+                <el-input placeholder="请输入关键词" icon="search"></el-input>
+              </div>
+              <li v-for="item in terminalType">
+                <el-checkbox>{{item}}</el-checkbox>
+              </li>
+            </ul>
+
+            <ul v-show="changeFlag === 5">
+              <el-checkbox class="">全选/全不选</el-checkbox>
+              <div class="select-auth-input">
+                <el-input placeholder="请输入关键词" icon="search"></el-input>
+              </div>
+              <li v-for="item in appPackageType">
+                <el-checkbox>{{item}}</el-checkbox>
+              </li>
+            </ul>
+
+            <ul v-show="changeFlag === 6">
+              <el-checkbox class="">全选/全不选</el-checkbox>
+              <div class="select-auth-input">
+                <el-input placeholder="请输入关键词" icon="search"></el-input>
+              </div>
+              <li v-for="item in appidType">
+                <el-checkbox>{{item}}</el-checkbox>
+              </li>
             </ul>
           </div>
+
         </div>
       </div>
 
@@ -55,69 +90,85 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import BScroll from 'better-scroll';
   export default {
+    data () {
+      return {
+        changeFlag: 1,
+        showSelectAuthBox: false,
+        gameType: ['所有游戏', '德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'],
+        platformType: ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'],
+        hallType: ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'],
+        terminalType: ['所有终端', 'IOS', 'PC', 'ANDRIOD'],
+        appPackageType: ['所有应用包', '360', '新浪', '腾讯', '应用包5', '应用包6'],
+        appidType: ['所有APPID', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）']
+      };
+    },
     methods: {
-      selectBox () {
-        // todo
+      toggleSelected () {
+        this.showSelectAuthBox = !this.showSelectAuthBox;
+      },
+      change ($event, num) {
+        $event.target.style.background = 'lightgreeen';
+        this.changeFlag = num;
+        console.log(this.changeFlag);
       }
     },
-    mounted () {
-      /* eslint-disable no-unused-vars */
-      let leftScroll = new BScroll('#scroll-left-wrap', {
-        click: true
-      });
-      /* eslint-disable no-unused-vars */
-//      let rightScroll = new BScroll('#scroll-right-wrap', {
-//        click: true
-//      });
-    }
+    props: ['parentRouter']
   };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-
+  @import "../../common/css/common.styl"
   .select-application
-    width: 400px
+    position: relative
     .please-select
       display: inline-block
       width: 200px
       text-align: center
-      color:black
-      border:1px solid #000000
+      color: black
+      border-right: 1px solid #e5e5e5
       &:hover
-        text-decoration :none
+        text-decoration: none
     .select-box-wrap
-      background :#fff
-      .box-name
-        font-weight:700
-        font-size: 14px
+      position: absolute
+      top: 50px
+      z-index: 20
+      background: #ffffff
+      border: 5px solid #e5e5e5
+      border-radius: 5px
+      .box-header
         background: #0099CC
+        line-height: 14px
+        padding: 10px
+        .box-title
+          float: left
+          margin: 0
+          font-weight: 700
+          font-size: 14px
+        .btn-wrap
+          float: right
       .box-body
-        height: 200px
-        .scroll-left-wrap
+        .left-part
           display: inline-block
           height: 100%
-          overflow: hidden
           text-align: center
-          vertical-align :top
-          border:1px solid #000000
-          .scroll-inner
-            a
-              display: inline-block
-              padding:10px 40px
-        .select-right
+          vertical-align: top
+          border-right: 5px solid #e5e5e5
+          padding-bottom: 20px
+          li
+            padding: 10px
+        .right-part
           display: inline-block
-          height:100%
-          vertical-align :top
-          overflow: hidden
-          .search
+          height: 100%
+          width: 400px
+          vertical-align: top
+          padding: 10px 20px
+          .select-auth-input
             margin: 10px 0
-            outline :none
-            border:1px solid #000000
-            text-indent :2rem
-          .scroll-right-wrap
-            width: 200px
-            overflow: hidden
-
+          .data-list
+            padding-right: 20px
+            height: 215px
+            overflow: auto
+    .active
+      background :lightsalmon
 </style>

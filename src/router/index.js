@@ -16,11 +16,13 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
+    {path: '/', redirect: '/home'},
     {
       path: '/home',
       name: 'Application',
       component: Application,
       children: [
+        {path: '/', redirect: '/home/game'},
         {
           path: '/home/game',
           name: 'game',
@@ -63,6 +65,7 @@ export default new Router({
       name: 'Management',
       component: Management,
       children: [
+        {path: '/', redirect: '/management/game'},
         {
           path: '/management/game',
           component: SelectGame

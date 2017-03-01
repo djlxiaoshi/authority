@@ -35,7 +35,8 @@
     </div>
 
     <div class="select-auth-wrap">
-      <Select-auth parent-router="home"></Select-auth>
+      <!--<Select-auth parent-router="home"></Select-auth>-->
+      <select-auth2></select-auth2>
     </div>
 
     <!--添加权限-->
@@ -112,6 +113,7 @@
 
 <script type="text/ecmascript-6">
   import SelectAuth from 'components/SelectAuth/SelectAuth';
+  import SelectAuth2 from 'components/SelectAuth/SelectAuth2';
   export default {
     data () {
       return {
@@ -130,7 +132,8 @@
       };
     },
     components: {
-      SelectAuth
+      SelectAuth,
+      SelectAuth2
     },
     methods: {
       showMore () {
