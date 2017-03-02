@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+
+  <style>
+    .el-tabs__item {
+      display: block
+    }
+
+    .el-tabs__header {
+      display: inline-block;
+    }
+
+    .el-tabs__content {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <el-checkbox v-model="flag">全选</el-checkbox>
+  <button @click="test">点击</button>
+</div>
+</body>
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        flag: false
+      }
+    },
+    methods: {
+      test:function () {
+        this.flag = !this.flag;
+      }
+    }
+  })
+</script>
+</html>

@@ -12,74 +12,108 @@
       </div>
       <div class="box-body">
         <ul class="left-part">
-          <li @click="change($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择游戏</a></li>
-          <li @click="change($event,2)" :class="{active: changeFlag === 2}"><a href="javascript:void(0)">请选择平台</a></li>
-          <li @click="change($event,3)" :class="{active: changeFlag === 3}"><a href="javascript:void(0)">请选择大厅</a></li>
-          <li @click="change($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择终端</a></li>
-          <li @click="change($event,5)" :class="{active: changeFlag === 5}"><a href="javascript:void(0)">请选择应用包</a></li>
-          <li @click="change($event,6)" :class="{active: changeFlag === 6}"><a href="javascript:void(0)">请选择APPID</a></li>
+          <li @click="switchMenu($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择游戏</a>
+          </li>
+          <li @click="switchMenu($event,2)" :class="{active: changeFlag === 2}"><a href="javascript:void(0)">请选择平台</a>
+          </li>
+          <li @click="switchMenu($event,3)" :class="{active: changeFlag === 3}"><a href="javascript:void(0)">请选择大厅</a>
+          </li>
+          <li @click="switchMenu($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择终端</a>
+          </li>
+          <li @click="switchMenu($event,5)" :class="{active: changeFlag === 5}"><a href="javascript:void(0)">请选择应用包</a>
+          </li>
+          <li @click="switchMenu($event,6)" :class="{active: changeFlag === 6}"><a
+            href="javascript:void(0)">请选择APPID</a>
+          </li>
         </ul>
         <div class="right-part">
           <div class="data-list">
-            <ul v-show="changeFlag === 1">
-              <el-checkbox class="" @click="selectGame">全选/全不选</el-checkbox>
+            <div v-show="changeFlag === 1">
+              <el-checkbox :indeterminate="gameTypeChecked.length > 0 && gameTypeChecked.length < gameType.length" v-model="gameAll"
+                           @change="handleCheckAllChange($event, 'gameType', 'gameTypeChecked')">全选/全不选
+              </el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search"></el-input>
               </div>
-              <li v-for="item in gameType">
-                <el-checkbox v-model="gameTypeChecked" :value="item">{{item}}</el-checkbox>
-              </li>
-            </ul>
+              <el-checkbox-group v-model="gameTypeChecked"
+                                 @change="handleCheckedCitiesChange('gameType', 'gameTypeChecked', 'gameAll')">
+                <div v-for="item in gameType">
+                  <el-checkbox :label="item"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </div>
 
-            <ul v-show="changeFlag === 2">
-              <el-checkbox class="">全选/全不选</el-checkbox>
+            <div v-show="changeFlag === 2">
+              <el-checkbox class="" :indeterminate="platformTypeChecked.length > 0 && platformTypeChecked.length < platformType.length" v-model="platformAll"
+                           @change="handleCheckAllChange($event, 'platformType', 'platformTypeChecked')">全选/全不选
+              </el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search"></el-input>
               </div>
-              <li v-for="item in platformType">
-                <el-checkbox>{{item}}</el-checkbox>
-              </li>
-            </ul>
+              <el-checkbox-group v-model="platformTypeChecked"
+                                 @change="handleCheckedCitiesChange('platformType', 'platformTypeChecked', 'platformAll')">
+                <div v-for="item in platformType">
+                  <el-checkbox :label="item"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </div>
 
-            <ul v-show="changeFlag === 3">
-              <el-checkbox class="">全选/全不选</el-checkbox>
+            <div v-show="changeFlag === 3">
+              <el-checkbox :indeterminate="hallTypeChecked.length > 0 && hallTypeChecked.length < hallType.length" v-model="hallAll"
+                           @change="handleCheckAllChange($event, 'hallType', 'hallTypeChecked')">全选/全不选</el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search"></el-input>
               </div>
-              <li v-for="item in hallType">
-                <el-checkbox>{{item}}</el-checkbox>
-              </li>
-            </ul>
 
-            <ul v-show="changeFlag === 4">
-              <el-checkbox class="">全选/全不选</el-checkbox>
-              <div class="select-auth-input">
-                <el-input placeholder="请输入关键词" icon="search"></el-input>
-              </div>
-              <li v-for="item in terminalType">
-                <el-checkbox>{{item}}</el-checkbox>
-              </li>
-            </ul>
+              <el-checkbox-group v-model="hallTypeChecked"
+                                 @change="handleCheckedCitiesChange('hallType', 'hallTypeChecked', 'hallAll')">
+                <div v-for="item in hallType">
+                  <el-checkbox :label="item"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </div>
 
-            <ul v-show="changeFlag === 5">
-              <el-checkbox class="">全选/全不选</el-checkbox>
+            <div v-show="changeFlag === 4">
+              <el-checkbox :indeterminate="terminalTypeChecked.length > 0 && terminalTypeChecked.length < terminalType.length" v-model="terminalAll"
+                           @change="handleCheckAllChange($event, 'terminalType', 'terminalTypeChecked')">全选/全不选</el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search"></el-input>
               </div>
-              <li v-for="item in appPackageType">
-                <el-checkbox>{{item}}</el-checkbox>
-              </li>
-            </ul>
+              <el-checkbox-group v-model="terminalTypeChecked"
+                                 @change="handleCheckedCitiesChange('terminalType', 'terminalTypeChecked', 'terminalAll')">
+                <div v-for="item in terminalType">
+                  <el-checkbox :label="item"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </div>
 
-            <ul v-show="changeFlag === 6">
-              <el-checkbox class="">全选/全不选</el-checkbox>
+            <div v-show="changeFlag === 5">
+              <el-checkbox :indeterminate="appPackageTypeChecked.length > 0 && appPackageTypeChecked.length < appPackageType.length" v-model="appPackageAll"
+                           @change="handleCheckAllChange($event, 'appPackageType', 'appPackageTypeChecked')">全选/全不选</el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search"></el-input>
               </div>
-              <li v-for="item in appidType">
-                <el-checkbox>{{item}}</el-checkbox>
-              </li>
-            </ul>
+              <el-checkbox-group v-model="appPackageTypeChecked"
+                                 @change="handleCheckedCitiesChange('appPackageType', 'appPackageTypeChecked', 'appPackageAll')">
+                <div v-for="item in appPackageType">
+                  <el-checkbox :label="item"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </div>
+
+            <div v-show="changeFlag === 6">
+              <el-checkbox :indeterminate="appidTypeChecked.length > 0 && appidTypeChecked.length < appidType.length" v-model="appidAll"
+                           @change="handleCheckAllChange($event, 'appidType', 'appidTypeChecked')">全选/全不选</el-checkbox>
+              <div class="select-auth-input">
+                <el-input placeholder="请输入关键词" icon="search"></el-input>
+              </div>
+              <el-checkbox-group v-model="appidTypeChecked"
+                                 @change="handleCheckedCitiesChange('appidType', 'appidTypeChecked', 'appidAll')">
+                <div v-for="item in appidType">
+                  <el-checkbox :label="item"></el-checkbox>
+                </div>
+              </el-checkbox-group>
+            </div>
           </div>
 
         </div>
@@ -90,40 +124,67 @@
 </template>
 
 <script type="text/ecmascript-6">
+//  const gameType = ['所有游戏', '德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
+//  const platformType = ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'];
+//  const hallType = ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'];
+//  const terminalType = ['所有终端', 'IOS', 'PC', 'ANDRIOD'];
+//  const appPackageType = ['所有应用包', '360', '新浪', '腾讯'];
+//  const appidType = ['所有APPID', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）'];
   export default {
     data () {
       return {
         changeFlag: 1,
+        isIndeterminate: false,
         showSelectAuthBox: false,
         gameType: ['所有游戏', '德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'],
         platformType: ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'],
         hallType: ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'],
         terminalType: ['所有终端', 'IOS', 'PC', 'ANDRIOD'],
         appPackageType: ['所有应用包', '360', '新浪', '腾讯'],
-        appidType: ['所有APPID', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）'],
+        appidType: ['所有APPID', '德州扑克-PC-新浪微博-简体（3737）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1546）', '德州扑克-ANDROID-华为联运-简体（1547）'],
         gameTypeChecked: [],
         platformTypeChecked: [],
         hallTypeChecked: [],
         terminalTypeChecked: [],
         appPackageTypeChecked: [],
-        appidTypeChecked: []
+        appidTypeChecked: [],
+//        是否点击全选标志位
+        gameAll: false,
+        platformAll: false,
+        hallAll: false,
+        terminalAll: false,
+        appPackageAll: false,
+        appidAll: false
       };
     },
     methods: {
       toggleSelected () {
         this.showSelectAuthBox = !this.showSelectAuthBox;
       },
-      change ($event, num) {
+      switchMenu ($event, num) {
         $event.target.style.background = 'lightgreeen';
         this.changeFlag = num;
         console.log(this.changeFlag);
       },
-      selectGame () {
-        this.gameTypeChecked = [];
-        this.gameType.forEach(function (item) {
-          this.gameTypeChecked.push(item);
-        });
+      handleCheckAllChange ($event, selectType, checkedType) {
+        console.log(selectType);
+        this[checkedType] = $event.target.checked ? this[selectType] : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedCitiesChange (selectType, checkedType, isAll) {
+        let checkedCount = this[checkedType].length;
+        this[isAll] = checkedCount === this[selectType].length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this[selectType].length;
       }
+    },
+    watch: {
+      'gameTypeChecked' () {
+        console.log('监听');
+        console.log(this.gameTypeChecked);
+      }
+    },
+    computed () {
+
     },
     props: ['parentRouter']
   };
@@ -182,5 +243,5 @@
             height: 215px
             overflow: auto
     .active
-      background :lightsalmon
+      background: lightsalmon
 </style>
