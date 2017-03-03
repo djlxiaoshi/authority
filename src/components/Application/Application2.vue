@@ -39,111 +39,102 @@
       <select-auth3 v-on:addSelData="addSelData"></select-auth3>
     </div>
 
+    <!--添加权限-->
     <div class="add-auth-wrap">
-      <el-table :data="waitingAdd" border style="width: 100%">
-        <el-table-column label="游戏" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.game">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="平台" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.platform">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="大厅" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.hall">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="终端"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.terminal">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="应用包"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appPackage">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="APPID应用"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appid">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="权限内容" align="center">
-          <el-table-column label="权限1" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="deliverRefund">发货退款</el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="权限2" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="warningSetting">报警设置</el-checkbox>
-            </template>
-          </el-table-column>
-        </el-table-column>
-        <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template scope="scope">
-            <el-button size="small" type="danger" @click="addAuth(scope.row, scope.row.key)">添加</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <table class="ui celled structured table">
+        <thead>
+        <tr class="center aligned">
+          <th >游戏</th>
+          <th >平台</th>
+          <th >大厅</th>
+          <th >终端</th>
+          <th >应用包</th>
+          <th >APPID应用</th>
+          <th colspan="2">权限内容</th>
+          <th >业务审核人</th>
+          <th >操作</th>
+        </tr>
+        </thead>
+        <tbody>
+          <template v-if="waitingAdd.length > 0">
+          <tr class="center bottom aligned" v-for="(item, index) in waitingAdd" >
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.game">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.platform">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.hall">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.terminal">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.appPackage">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.appid">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><el-checkbox v-model="item.deliverRefund">发货退款</el-checkbox></td>
+            <td class="middle aligned"><el-checkbox v-model="item.warningSetting">报警设置</el-checkbox></td>
+            <td class="middle aligned">DJLXS</td>
+            <td class="middle aligned"><el-button size="small" type="danger" @click="addAuth(item, index)">添加</el-button></td>
+          </tr>
+        </template>
+          <template v-else>
+          <tr>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned">暂无数据</td>
+            <td class="middle aligned">暂无数据</td>
+            <td class="middle aligned">暂无数据</td>
+          </tr>
+        </template>
+        </tbody>
+      </table>
     </div>
 
     <!--已添加权限-->
     <div class="own-auth-wrap">
-      <el-table :data="addedData" border style="width: 100%">
-        <el-table-column label="游戏" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.game">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="平台" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.platform">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="大厅" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.hall">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="终端"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.terminal">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="应用包"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appPackage">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="APPID应用"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appid">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="权限内容" align="center">
-          <el-table-column label="权限1" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="scope.row.deliverRefund">发货退款</el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="权限2" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="scope.row.warningSetting">报警设置</el-checkbox>
-            </template>
-          </el-table-column>
-        </el-table-column>
-        <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template scope="scope">
-            <el-button size="small" type="danger" @click="deleteAuth(scope.row, scope.row.key)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <table class="ui celled structured table">
+        <thead>
+          <tr class="center aligned">
+          <th >游戏</th>
+          <th >平台</th>
+          <th >大厅</th>
+          <th >终端</th>
+          <th >应用包</th>
+          <th >APPID应用</th>
+          <th colspan="2">权限内容</th>
+          <th >业务审核人</th>
+          <th >操作</th>
+        </tr>
+        </thead>
+        <tbody>
+          <template v-if="addedData.length > 0">
+          <tr class="center bottom aligned"   v-for="(item, index) in addedData">
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.game">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.platform">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.hall">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.terminal">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.appPackage">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><span v-for="child in item.appid">{{child}}<br></span></td>
+            <td class="middle aligned" style="line-height: 1rem;"><el-checkbox v-model="item.deliverRefund">发货退款</el-checkbox></td>
+            <td class="middle aligned"><el-checkbox v-model="item.warningSetting">报警设置</el-checkbox></td>
+            <td class="middle aligned">DJLXS</td>
+            <td class="middle aligned"><el-button size="small" type="danger" @click="deleteAuth(item, index)">删除</el-button></td>
+          </tr>
+        </template>
+          <template v-else>
+          <tr>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned" style="line-height: 1rem;">暂无数据</td>
+            <td class="middle aligned">暂无数据</td>
+            <td class="middle aligned">暂无数据</td>
+            <td class="middle aligned">暂无数据</td>
+          </tr>
+        </template>
+        </tbody>
+      </table>
     </div>
 
     <!--申请理由-->
@@ -166,9 +157,7 @@
     data () {
       return {
         moreContent: false,
-        showFlag: false,
-        deliverRefund: false,
-        warningSetting: false,
+        showFlag: true,
         waitingAdd: [{
           game: ['地方棋牌'],
           platform: ['四川'],
@@ -176,6 +165,8 @@
           terminal: ['全部'],
           appPackage: ['全部'],
           appid: ['全部'],
+          deliverRefund: true,
+          warningSetting: false,
           auth: [{name: 'd', age: 20}],
           assessor: 'DJLXS(后台)'
         }],
@@ -226,16 +217,11 @@
       },
       addAuth (item, index) {
         // 设置两个复选框
-        item.deliverRefund = this.deliverRefund;
-        item.warningSetting = this.warningSetting;
         // 添加权限
         console.log(item);
         this.addedData.push(item);
         // 将预添加队列中的删除
         this.waitingAdd.splice(index, 1);
-        // 复位复选框
-        this.deliverRefund = false;
-        this.warningSetting = false;
       }
     }
   };

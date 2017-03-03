@@ -6,7 +6,7 @@
       <div class="box-header clearfix">
         <h5 class="box-title">应用选择器</h5>
         <div class="btn-wrap">
-          <el-button type="primary" size="mini" @click="toggleSelected">确定</el-button>
+          <el-button type="primary" size="mini" @click="addSelect">确定</el-button>
           <el-button type="warning" size="mini" @click="clearAll">置空</el-button>
         </div>
       </div>
@@ -22,7 +22,8 @@
           </li>
           <li @click="switchMenu($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择应用包</a>
           </li>
-          <li @click="switchMenu($event,5)" :class="{active: changeFlag === 5}"><a href="javascript:void(0)">请选择APPID</a>
+          <li @click="switchMenu($event,5)" :class="{active: changeFlag === 5}"><a
+            href="javascript:void(0)">请选择APPID</a>
           </li>
         </ul>
         <div class="right-part">
@@ -53,12 +54,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  const gameType = ['所有游戏', '德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
+  const gameType = ['德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
   const platformType = ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'];
   const hallType = ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'];
-  const terminalType = ['所有终端', 'IOS', 'PC', 'ANDRIOD'];
-  const appPackageType = ['所有应用包', '360', '新浪', '腾讯'];
-  const appidType = ['所有APPID', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）'];
+  const terminalType = ['IOS', 'PC', 'ANDRIOD'];
+  const appPackageType = ['360', '新浪', '腾讯'];
+  const appidType = ['德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1432）', '德州扑克-ANDROID-VIVO联运-简体（1353）', '德州扑克-ANDROID-华为联运-简体（1455）'];
 
   export default {
     data () {
@@ -122,13 +123,38 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          window.alert('确定置空');
+          this.authSelect.forEach((item) => {
+            item['checked'] = [];
+            item['isAll'] = false;
+          });
         }).catch(() => {
-          window.alert('放弃置空');
         });
       },
       isIndeterminate (index, selecType) {
         return this.authSelect[index]['checked']['length'] > 0 && this.authSelect[index]['checked']['length'] < selecType.length;
+      },
+      addSelect () {
+        // 判断是否填写完整
+        let _msg = ['游戏', '平台', '大厅', '终端', '应用包', 'APPID'];
+        let _data = this.authSelect;
+        for (let index = 0; index < _data.length; index++) {
+          if (_data[index]['checked'].length === 0) {
+            this.$message({
+              message: `请至少选择一种${_msg[index]}`,
+              type: 'warning'
+            });
+            return;
+          }
+        }
+        // 触发父组件事件
+        this.$emit('addSelData', this.authSelect);
+        // 所有复选框复位
+        _data.forEach((item) => {
+          item['checked'] = [];
+          item['isAll'] = false;
+        });
+        // 关闭权限选择框
+        this.showSelectAuthBox = !this.showSelectAuthBox;
       }
     },
     computed: {},
