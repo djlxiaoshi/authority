@@ -1,0 +1,28 @@
+{
+  "selectData":[
+    {
+      "modelChecked": ["德州扑克"],
+      "isAll":false
+    },
+    {
+      "modelChecked": [],
+      "isAll":false
+    },
+    {
+      "modelChecked": [],
+      "isAll":false
+    },
+    {
+      "modelChecked": [],
+      "isAll":false
+    },
+    {
+      "modelChecked": [],
+      "isAll":false
+    },
+    {
+      "modelChecked": [],
+      "isAll":false
+    }
+  ]
+}

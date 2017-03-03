@@ -30,7 +30,8 @@ module.exports = {
       'src': resolve('src'),
       'assets': resolve('src/assets'),
       'components': resolve('src/components'),
-      'common': resolve('src/common')
+      'common': resolve('src/common'),
+      'mock': resolve('src/mock')
     }
   },
   plugins: [

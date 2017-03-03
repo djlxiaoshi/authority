@@ -6,7 +6,8 @@
       </div>
 
       <div class="select-auth">
-       <SelectAuth></SelectAuth>
+        <!--<SelectAuth2></SelectAuth2>-->
+       <SelectAuth2></SelectAuth2>
       </div>
 
       <!--添加权限-->
@@ -89,6 +90,7 @@
 
 <script type="text/ecmascript-6">
   import SelectAuth from 'components/SelectAuth/SelectAuth';
+  import SelectAuth2 from 'components/SelectAuth/SelectAuth2';
   export default {
     data () {
       return {
@@ -121,7 +123,8 @@
       }
     },
     components: {
-      SelectAuth
+      SelectAuth,
+      SelectAuth2
     }
   };
 </script>
