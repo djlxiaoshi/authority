@@ -21,6 +21,22 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+
+var appData = require('../data.json');
+var serviceData = appData.serviceData;
+
+var apiRoutes = express.Router();
+
+apiRoutes.get('/serviceData', function (req, res) {
+  res.json({
+    errno: 0,
+    data: serviceData
+  });
+});
+
+app.use('/api', apiRoutes);  //在路径前面添加父路径‘api’，则实际访问路径应该为‘api/seller’
+
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {

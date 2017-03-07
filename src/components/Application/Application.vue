@@ -13,147 +13,174 @@
       <p class="authority-text">
         支付后台APPID权限，会根据数据后台的BPID权限自动开通，如果没有某个应用的appid权限，请自行去data后台开通对应的bpid权限，如果在数据后台开通权限后，在支付后台还是提示无权限，请退出账号，清空浏览器缓存，重新登录一下即可查看；如果有疑问，请及时联系AnneDu，谢谢。</p>
     </div>
-    <div class="view-content">
-      <h5>查看内容</h5>
-      <form action="">
-        <div class="" style="display: inline-block;vertical-align: center">
-          <el-checkbox>订单查询</el-checkbox>
-          <el-checkbox>欺诈订单</el-checkbox>
-          <el-checkbox>统计信息</el-checkbox>
-        </div>
-        <div class="more-content" v-show="moreContent" style="display: inline-block;vertical-align: center">
-          <el-checkbox @change="showPrompt">产品配置</el-checkbox>
-          <el-checkbox @change="showPrompt">收入汇总</el-checkbox>
-          <el-checkbox>应用警报设置</el-checkbox>
-          <el-checkbox @change="showPrompt">财务对账</el-checkbox>
-        </div>
-        <div style="display: inline-block;vertical-align: center">
-          <el-button type="text" @click="showMore" v-if="showFlag">更多内容</el-button>
-          <el-button type="text" @click="showMore" v-else>收起</el-button>
-        </div>
-      </form>
-    </div>
 
-    <div class="select-auth-wrap">
-      <!--<Select-auth parent-router="home"></Select-auth>-->
-      <select-auth3 v-on:addSelData="addSelData"></select-auth3>
-    </div>
 
-    <div class="add-auth-wrap">
-      <el-table :data="waitingAdd" border style="width: 100%">
-        <el-table-column label="游戏" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.game">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="平台" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.platform">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="大厅" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.hall">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="终端"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.terminal">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="应用包"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appPackage">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="APPID应用"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appid">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="权限内容" align="center">
-          <el-table-column label="权限1" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="deliverRefund">发货退款</el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="权限2" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="warningSetting">报警设置</el-checkbox>
-            </template>
-          </el-table-column>
-        </el-table-column>
-        <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template scope="scope">
-            <el-button size="small" type="danger" @click="addAuth(scope.row, scope.row.key)">添加</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-tabs value="first" style="min-height:400px">
+      <el-tab-pane label="查询权限" name="first">
+        <div class="view-content">
+          <table class="ui single line celled table" style="width: 400px;">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>查看权限</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="showFlag === false">
+                <tr v-for="(item, index) in viewAuth" v-show="item.have">
+                  <td>{{index + 1}}</td>
+                  <td>
+                    <el-checkbox :checked="item.have" v-model.sync="item.have" disabled>{{item.authName}}</el-checkbox>
+                  </td>
+                </tr>
+              </template>
+              <template v-else>
+                <tr v-for="(item, index) in viewAuth">
+                  <td>{{index + 1}}</td>
+                  <td>
+                      <el-checkbox :checked="item.have" v-model.sync="item.have">{{item.authName}}</el-checkbox>
+                  </td>
+                </tr>
+              </template>
 
-    <!--已添加权限-->
-    <div class="own-auth-wrap">
-      <el-table :data="addedData" border style="width: 100%">
-        <el-table-column label="游戏" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.game">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="平台" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.platform">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="大厅" align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.hall">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="终端"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.terminal">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="应用包"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appPackage">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="APPID应用"  align="center">
-          <template scope="scope">
-            <span v-for="child in scope.row.appid">{{child}}<br></span>
-          </template>
-        </el-table-column>
-        <el-table-column label="权限内容" align="center">
-          <el-table-column label="权限1" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="scope.row.deliverRefund">发货退款</el-checkbox>
-            </template>
-          </el-table-column>
-          <el-table-column label="权限2" align="center">
-            <template scope="scope">
-              <el-checkbox v-model="scope.row.warningSetting">报警设置</el-checkbox>
-            </template>
-          </el-table-column>
-        </el-table-column>
-        <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template scope="scope">
-            <el-button size="small" type="danger" @click="deleteAuth(scope.row, scope.row.key)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+            </tbody>
+            <tfoot class="full-width" style="text-align: center;">
+              <tr>
+                <td colspan="2" style="padding: 0;">
+                  <el-button type="text" @click="showMore" :icon="showFlag ? 'arrow-up' : 'arrow-down'"></el-button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="操作权限" name="second">
+        <div class="select-auth-wrap">
+          <!--<Select-auth parent-router="home"></Select-auth>-->
+          <select-auth3 v-on:addSelData="addSelData"></select-auth3>
+        </div>
+        <div class="add-auth-wrap">
+          <el-table :data="waitingAdd" border style="width: 100%">
+            <el-table-column label="游戏" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.game">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="平台" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.platform">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="大厅" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.hall">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="终端" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.terminal">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="应用包" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.appPackage">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="APPID应用" align="center" width="300">
+              <template scope="scope">
+                <span v-for="child in scope.row.appid">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="权限内容" align="center">
+              <el-table-column label="权限1" align="center">
+                <template scope="scope">
+                  <el-checkbox v-model="scope.row.deliverRefund">发货退款</el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column label="权限2" align="center">
+                <template scope="scope">
+                  <el-checkbox v-model="scope.row.warningSetting">报警设置</el-checkbox>
+                </template>
+              </el-table-column>
+            </el-table-column>
+            <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+              <template scope="scope">
+                <el-button size="small" type="danger" @click="addAuth(scope.row, scope.$index)">添加</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <!--已添加权限-->
+        <div class="own-auth-wrap">
+          <el-table :data="addedData" border style="width: 100%">
+            <el-table-column label="游戏" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.game">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="平台" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.platform">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="大厅" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.hall">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="终端" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.terminal">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="应用包" align="center">
+              <template scope="scope">
+                <span v-for="child in scope.row.appPackage">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="APPID应用" align="center" width="300">
+              <template scope="scope">
+                <span v-for="child in scope.row.appid">{{child}}<br></span>
+              </template>
+            </el-table-column>
+            <el-table-column label="权限内容" align="center">
+              <el-table-column label="权限1" align="center">
+                <template scope="scope">
+                  <el-checkbox v-model="scope.row.deliverRefund">发货退款</el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column label="权限2" align="center">
+                <template scope="scope">
+                  <el-checkbox v-model="scope.row.warningSetting">报警设置</el-checkbox>
+                </template>
+              </el-table-column>
+            </el-table-column>
+            <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
+              <template scope="scope">
+                <el-button size="small" type="danger" @click="deleteAuth(scope.row, scope.$index)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
+
 
     <!--申请理由-->
     <div class="application-reason-wrap">
-      <el-input type="textarea" :rows="7" placeholder="请输入内容"></el-input>
+      <el-input type="textarea" :rows="7" placeholder="请输入内容" v-model="applyReason"></el-input>
+    </div>
+
+
+    <div>
+      <el-button @click="ajaxGet">发送ajax请求</el-button>
     </div>
 
     <div class="bottom-btn-wrap">
-      <el-button type="primary">取消</el-button>
-      <el-button type="primary">提出申请</el-button>
+      <el-button type="primary" @click="cancelApply">取消</el-button>
+      <el-button type="primary" @click="apply">提出申请</el-button>
     </div>
   </div>
 </template>
@@ -165,21 +192,48 @@
   export default {
     data () {
       return {
-        moreContent: false,
         showFlag: false,
-        deliverRefund: false,
-        warningSetting: false,
-        waitingAdd: [{
-          game: ['地方棋牌'],
-          platform: ['四川'],
-          hall: ['全部'],
-          terminal: ['全部'],
-          appPackage: ['全部'],
-          appid: ['全部'],
-          auth: [{name: 'd', age: 20}],
-          assessor: 'DJLXS(后台)'
-        }],
-        addedData: []
+        applyReason: '',
+        checkList: [],
+        waitingAdd: [],
+        addedData: [],
+        viewAuth: [
+          {
+            id: 1,
+            authName: '订单查询',
+            have: true
+          },
+          {
+            id: 2,
+            authName: '欺诈订单',
+            have: true
+          },
+          {
+            id: 3,
+            authName: '统计信息',
+            have: true
+          },
+          {
+            id: 4,
+            authName: '产品配置',
+            have: false
+          },
+          {
+            id: 5,
+            authName: '收入汇总',
+            have: false
+          },
+          {
+            id: 6,
+            authName: '应用警报设置',
+            have: false
+          },
+          {
+            id: 7,
+            authName: '财务对账',
+            have: false
+          }
+        ]
       };
     },
     components: {
@@ -189,8 +243,7 @@
     },
     methods: {
       showMore () {
-        this.moreContent = !this.moreContent;
-        this.showFlag = !this.moreContent;
+        this.showFlag = !this.showFlag;
       },
       showPrompt ($event) {
         console.log(1);
@@ -221,21 +274,56 @@
         _dataCache.terminal = data[3]['isAll'] ? ['全部'] : data[3]['checked'];
         _dataCache.appPackage = data[4]['isAll'] ? ['全部'] : data[4]['checked'];
         _dataCache.appid = data[5]['isAll'] ? ['全部'] : data[5]['checked'];
+        _dataCache.deliverRefund = false;
+        _dataCache.warningSetting = false;
         console.dir(_dataCache);
         this.waitingAdd.push(_dataCache);
       },
       addAuth (item, index) {
         // 设置两个复选框
-        item.deliverRefund = this.deliverRefund;
-        item.warningSetting = this.warningSetting;
+//        item.deliverRefund = this.deliverRefund;
+//        item.warningSetting = this.warningSetting;
         // 添加权限
         console.log(item);
         this.addedData.push(item);
         // 将预添加队列中的删除
         this.waitingAdd.splice(index, 1);
         // 复位复选框
-        this.deliverRefund = false;
-        this.warningSetting = false;
+//        this.deliverRefund = false;
+//        this.warningSetting = false;
+      },
+      cancelApply () {
+        this.$confirm('确定取消申请吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          window.alert('取消申请');
+        }).catch(() => {
+          window.alert('点错了');
+        });
+      },
+      apply () {
+        // 整合数据 addedData + 申请理由
+        let _oneApply = {};
+        _oneApply.authLists = this.addedData;
+        _oneApply.applyReason = this.applyReason;
+        // 本地缓存
+        window.localStorage.applyLists = [];
+        window.localStorage.applyLists.push(_oneApply);
+        console.log('提交数据给后台，利用本地缓存来做');
+        console.log('我的权限数据应该是从后台取数据');
+      },
+      ajaxGet () {
+        // 发送ajax请求，后台提取数据
+        this.$http.get('/api/serviceData').then(response => {
+          window.alert('发送请求成功');
+          // get body data
+          // this.someData = response.body;
+          console.log(response.body);
+        }, response => {
+          // error callback
+        });
       }
     }
   };

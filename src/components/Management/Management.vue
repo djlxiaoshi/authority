@@ -1,6 +1,6 @@
 <template>
   <div class='auth-manage'>
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" @tab-click="loadData">
       <el-tab-pane label="角色管理" name="first">
         <div class="role-manage-head">
           <span class="v-align-m">角色:</span>
@@ -101,19 +101,47 @@
           selectedMenu: ['菜单1', '菜单2', '菜单3', '菜单4'],
           remarks: '这是一些备注2'
         }],
-        memberManData: [{
-          id: '1',
-          name: 'DJLXS',
-          role: '杀手',
-          department: '数据支付部',
-          loginTime: '2017-02-28'
-        }, {
-          id: '2',
-          name: 'DJL.L',
-          role: '左手',
-          department: '数据支付部',
-          loginTime: '2017-02-28'
-        }]
+        memberManData: [
+          /* {
+            id: '1',
+            name: 'DJLXS',
+            role: '杀手',
+            department: '数据支付部',
+            loginTime: '2017-02-28'
+          }, {
+            id: '2',
+            name: 'DJL.L',
+            role: '左手',
+            department: '数据支付部',
+            loginTime: '2017-02-28'
+          },
+          {
+            id: '1',
+            name: 'DJLXS',
+            role: '杀手',
+            department: '数据支付部',
+            loginTime: '2017-02-28'
+          }, {
+            id: '2',
+            name: 'DJL.L',
+            role: '左手',
+            department: '数据支付部',
+            loginTime: '2017-02-28'
+          },
+          {
+            id: '1',
+            name: 'DJLXS',
+            role: '杀手',
+            department: '数据支付部',
+            loginTime: '2017-02-28'
+          }, {
+            id: '2',
+            name: 'DJL.L',
+            role: '左手',
+            department: '数据支付部',
+            loginTime: '2017-02-28'
+          } */
+        ]
       };
     },
     components: {
@@ -164,6 +192,104 @@
         }).catch(() => {
           console.log('取消');
         });
+      },
+      loadData () {
+        let _this = this;
+        setTimeout(function () {
+          _this.memberManData = [
+            {
+              id: '1',
+              name: 'DJLXS',
+              role: '杀手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }, {
+              id: '2',
+              name: 'DJL.L',
+              role: '左手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            },
+            {
+              id: '1',
+              name: 'DJLXS',
+              role: '杀手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }, {
+              id: '2',
+              name: 'DJL.L',
+              role: '左手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            },
+            {
+              id: '1',
+              name: 'DJLXS',
+              role: '杀手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }, {
+              id: '2',
+              name: 'DJL.L',
+              role: '左手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            },
+            {
+              id: '1',
+              name: 'DJLXS',
+              role: '杀手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }, {
+              id: '2',
+              name: 'DJL.L',
+              role: '左手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            },
+            {
+              id: '1',
+              name: 'DJLXS',
+              role: '杀手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }, {
+              id: '2',
+              name: 'DJL.L',
+              role: '左手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            },
+            {
+              id: '1',
+              name: 'DJLXS',
+              role: '杀手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }, {
+              id: '2',
+              name: 'DJL.L',
+              role: '左手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            },
+            {
+              id: '1',
+              name: 'DJLXS',
+              role: '杀手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }, {
+              id: '2',
+              name: 'DJL.L',
+              role: '左手',
+              department: '数据支付部',
+              loginTime: '2017-02-28'
+            }
+          ];
+        }, 50);
       }
     }
   };
@@ -174,12 +300,12 @@
   .auth-manage
     .role-manage-head
       margin-bottom: 20px
-      vertical-align :middle
+      vertical-align: middle
       .role-input, .member-input
         display: inline-block
         margin-right: 30px
         width: 200px
-        vertical-align :middle
+        vertical-align: middle
       .add-role
         float: right
 </style>

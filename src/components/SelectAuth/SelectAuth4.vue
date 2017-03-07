@@ -54,6 +54,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import allAPPID from 'mock/appid.json';
   const gameType = ['德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
   const platformType = ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'];
   const hallType = ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'];
@@ -68,6 +69,14 @@
         changeFlag: 0,
         showSelectAuthBox: false,
         serviceData: [gameType, platformType, hallType, terminalType, appPackageType, appidType],
+        selectedCondition: {
+          game: [],
+          platform: [],
+          hall: [],
+          terminal: [],
+          appPackage: [],
+        },
+        filterAPPID: [],
         authSelect: [
           {
             'checked': [],
@@ -101,9 +110,28 @@
         this.showSelectAuthBox = !this.showSelectAuthBox;
       },
       switchMenu ($event, num) {
+
+        // 列表刷新，这里要根据其他选择（index）改变右边对应的列表
+        let _filterAPPID = [];
+        this.selectedCondition = this.authSelect[num]['checked'];
+        if (this.selectedCondition.length === 0 || this.selectedCondition.length === this.serviceData[num].length) {
+          _filterAPPID = this.serviceData[num];
+        } else {
+          this.selectedCondition.forEach((item, index) => {
+            allAPPID.forEach((value) => {
+              if (value.indexOf(item)) {
+                _filterAPPID.push(value);
+              }
+            });
+          });
+        }
+
+        this.filterAPPID = _filterAPPID;
+
         $event.target.style.background = 'lightgreeen';
         this.changeFlag = num;
         this.input = '';
+
       },
       handleCheckAllChange ($event, selectType, authItem) {
         authItem['checked'] = $event.target.checked ? selectType : [];
@@ -118,7 +146,7 @@
         return !this.input.trim() || item.toUpperCase().indexOf(this.input.trim().toUpperCase()) > -1;
       },
       clearAll () {
-        this.$confirm('确定要清空所有吗, 是否继续?', '提示', {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
