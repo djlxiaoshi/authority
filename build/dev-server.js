@@ -8,6 +8,7 @@ if (!process.env.NODE_ENV) {
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
+var url = require('url')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
@@ -28,9 +29,11 @@ var serviceData = appData.serviceData;
 var apiRoutes = express.Router();
 
 apiRoutes.get('/serviceData', function (req, res) {
+   var params = url.parse(req.url,true).query;
+   var _index = params.index;
   res.json({
     errno: 0,
-    data: serviceData
+    data: serviceData[_index]
   });
 });
 

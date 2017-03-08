@@ -29,16 +29,16 @@
         <div class="right-part">
           <div class="data-list">
             <div v-show="changeFlag === index" v-for="(item, index) in authSelect">
-              <el-checkbox :indeterminate="isIndeterminate(index, serviceData[index])"
+              <el-checkbox :indeterminate="isIndeterminate(index, serviceData)"
                            v-model="authSelect[index]['isAll']"
-                           @change="handleCheckAllChange($event, serviceData[index], authSelect[index])">全选/全不选
+                           @change="handleCheckAllChange($event, serviceData, authSelect[index])">全选/全不选
               </el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search" v-model="input"></el-input>
               </div>
               <el-checkbox-group v-model="authSelect[index]['checked']"
-                                 @change="handleCheckedCitiesChange(serviceData[index], authSelect[index])">
-                <div v-for="item in serviceData[index]" v-show="result(item)">
+                                 @change="handleCheckedCitiesChange(serviceData, authSelect[index])">
+                <div v-for="item in serviceData" v-show="result(item)">
                   <el-checkbox :label="item"></el-checkbox>
                 </div>
               </el-checkbox-group>
@@ -54,20 +54,23 @@
 </template>
 
 <script type="text/ecmascript-6">
-  const gameType = ['德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
-  const platformType = ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'];
-  const hallType = ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'];
-  const terminalType = ['IOS', 'PC', 'ANDRIOD'];
-  const appPackageType = ['360', '新浪', '腾讯'];
-  const appidType = ['德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1432）', '德州扑克-ANDROID-VIVO联运-简体（1353）', '德州扑克-ANDROID-华为联运-简体（1455）'];
-
+  //  const gameType = ['德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
+  //  const platformType = ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'];
+  //  const hallType = ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'];
+  //  const terminalType = ['IOS', 'PC', 'ANDRIOD'];
+  //  const appPackageType = ['360', '新浪', '腾讯'];
+  //  const appidType = ['德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1432）', '德州扑克-ANDROID-VIVO联运-简体（1353）', '德州扑克-ANDROID-华为联运-简体（1455）'];
+  // import {deepClone} from 'common/js/utils';
+  // import _u from 'underscore';
   export default {
     data () {
       return {
         input: '',
         changeFlag: 0,
         showSelectAuthBox: false,
-        serviceData: [gameType, platformType, hallType, terminalType, appPackageType, appidType],
+        serviceData: [],
+        filterMsg: {},
+        lastFilterMsg: false,
         authSelect: [
           {
             'checked': [],
@@ -101,9 +104,31 @@
         this.showSelectAuthBox = !this.showSelectAuthBox;
       },
       switchMenu ($event, num) {
+        let _this = this;
+        let typeLists = ['game', 'platform', 'hall', 'terminal', 'appPackage', 'appid'];
+
         $event.target.style.background = 'lightgreeen';
         this.changeFlag = num;
         this.input = '';
+
+        // 携带查询数据,在这里是可以判断数据是否变化
+        this.authSelect.forEach((value, index) => {
+          if (value.checked.length) {
+            console.log(typeLists[index]);
+            _this['filterMsg'][typeLists[index]] = value;
+          }
+        });
+
+        console.log('打印选择器需要传到后台的数据');
+        console.dir(_this['filterMsg']);
+
+        // 后台获取数据
+        this.$http.get(`/api/serviceData?index=${num}`).then(response => {
+          console.dir(response.body.data);
+          this.serviceData = response.body.data;
+        }, response => {
+          // error callback
+        });
       },
       handleCheckAllChange ($event, selectType, authItem) {
         authItem['checked'] = $event.target.checked ? selectType : [];
@@ -158,7 +183,17 @@
       }
     },
     computed: {},
-    props: ['parentRouter']
+    props: ['parentRouter'],
+    created () {
+      // 发送ajax请求，后台提取数据
+      this.$http.get('/api/serviceData?index=0').then(response => {
+        this.serviceData = response.body.data;
+      }, response => {
+        // error callback
+      });
+    },
+    watch: {
+    }
   };
 </script>
 

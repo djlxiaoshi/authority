@@ -20,36 +20,36 @@
         <div class="view-content">
           <table class="ui single line celled table" style="width: 400px;">
             <thead>
-              <tr>
-                <th>ID</th>
-                <th>查看权限</th>
-              </tr>
+            <tr>
+              <th>ID</th>
+              <th>查看权限</th>
+            </tr>
             </thead>
             <tbody>
-              <template v-if="showFlag === false">
-                <tr v-for="(item, index) in viewAuth" v-show="item.have">
-                  <td>{{index + 1}}</td>
-                  <td>
-                    <el-checkbox :checked="item.have" v-model.sync="item.have" disabled>{{item.authName}}</el-checkbox>
-                  </td>
-                </tr>
-              </template>
-              <template v-else>
-                <tr v-for="(item, index) in viewAuth">
-                  <td>{{index + 1}}</td>
-                  <td>
-                      <el-checkbox :checked="item.have" v-model.sync="item.have">{{item.authName}}</el-checkbox>
-                  </td>
-                </tr>
-              </template>
+            <template v-if="showFlag === false">
+              <tr v-for="(item, index) in viewAuth" v-show="item.have">
+                <td>{{index + 1}}</td>
+                <td>
+                  <el-checkbox :checked="item.have" v-model.sync="item.have" disabled>{{item.authName}}</el-checkbox>
+                </td>
+              </tr>
+            </template>
+            <template v-else>
+              <tr v-for="(item, index) in viewAuth">
+                <td>{{index + 1}}</td>
+                <td>
+                  <el-checkbox :checked="item.have" v-model.sync="item.have">{{item.authName}}</el-checkbox>
+                </td>
+              </tr>
+            </template>
 
             </tbody>
             <tfoot class="full-width" style="text-align: center;">
-              <tr>
-                <td colspan="2" style="padding: 0;">
-                  <el-button type="text" @click="showMore" :icon="showFlag ? 'arrow-up' : 'arrow-down'"></el-button>
-                </td>
-              </tr>
+            <tr>
+              <td colspan="2" style="padding: 0;">
+                <el-button type="text" @click="showMore" :icon="showFlag ? 'arrow-up' : 'arrow-down'"></el-button>
+              </td>
+            </tr>
             </tfoot>
           </table>
         </div>
@@ -171,11 +171,6 @@
     <!--申请理由-->
     <div class="application-reason-wrap">
       <el-input type="textarea" :rows="7" placeholder="请输入内容" v-model="applyReason"></el-input>
-    </div>
-
-
-    <div>
-      <el-button @click="ajaxGet">发送ajax请求</el-button>
     </div>
 
     <div class="bottom-btn-wrap">
@@ -304,26 +299,43 @@
         });
       },
       apply () {
-        // 整合数据 addedData + 申请理由
+        // 整合数据 addedData(操作权限) + 查看权限  +  申请理由
         let _oneApply = {};
-        _oneApply.authLists = this.addedData;
+        _oneApply.operateAuthLists = this.addedData;
+        _oneApply.viewAuth = this.viewAuth;
         _oneApply.applyReason = this.applyReason;
-        // 本地缓存
-        window.localStorage.applyLists = [];
-        window.localStorage.applyLists.push(_oneApply);
-        console.log('提交数据给后台，利用本地缓存来做');
-        console.log('我的权限数据应该是从后台取数据');
-      },
-      ajaxGet () {
-        // 发送ajax请求，后台提取数据
-        this.$http.get('/api/serviceData').then(response => {
-          window.alert('发送请求成功');
-          // get body data
-          // this.someData = response.body;
-          console.log(response.body);
-        }, response => {
-          // error callback
+
+        // 判断是否为空
+        let haveViewAuth = _oneApply.viewAuth.some((value) => {
+          return value.have;
         });
+
+        if (_oneApply.operateAuthLists.length === 0 && !haveViewAuth) {
+          this.$message({
+            message: '请至少选择一种权限',
+            type: 'warning'
+          });
+          console.log('由于无权限申请，申请被拒');
+        } else if (_oneApply.applyReason.trim() === '') {
+          this.$message({
+            message: '申请理由不能为空',
+            type: 'warning'
+          });
+          console.log('由于无申请理由，申请被拒');
+        } else {
+          this.$message({
+            message: '申请成功',
+            type: 'success'
+          });
+          console.log('申请成功');
+          console.log('这就是一条后台数据');
+          console.log(_oneApply);
+        }
+        // 本地缓存
+        // window.localStorage.applyLists = [];
+        // window.localStorage.applyLists.push(_oneApply);
+        //  console.log('提交数据给后台，利用本地缓存来做');
+        // console.log('我的权限数据应该是从后台取数据');
       }
     }
   };
