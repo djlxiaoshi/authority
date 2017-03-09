@@ -26,14 +26,40 @@ var app = express()
 var appData = require('../data.json');
 var serviceData = appData.serviceData;
 
+// 我的权限数据
+var myAuthData = require('../src/mock/myauth.json').authData;
+console.log(myAuthData);
+
 var apiRoutes = express.Router();
 
 apiRoutes.get('/serviceData', function (req, res) {
-   var params = url.parse(req.url,true).query;
-   var _index = params.index;
+  var params = url.parse(req.url, true).query;
+  var _index = params.index;
   res.json({
     errno: 0,
     data: serviceData[_index]
+  });
+});
+
+apiRoutes.get('/myAuthData', function (req, res) {
+  var params = url.parse(req.url, true).query;
+  var _authType = params.authType;
+  console.log(_authType)
+  res.json({
+    errno: 0,
+    data: myAuthData[_authType]
+  });
+});
+
+apiRoutes.get('/withdraw', function (req, res) {
+  var params = url.parse(req.url, true).query;
+  var _authType = params.authType;
+  var uuid = params.uuid;
+  console.log('authType:' + _authType + 'uuid:' + uuid);
+  res.json({
+    errno: 0,
+    // 看这里要不要把更新后的数据在获取一遍，传给前端。
+    // data: myAuthData[_authType]
   });
 });
 
@@ -48,12 +74,13 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
 })
 
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: () => {}
+  log: () => {
+  }
 })
 // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function (compilation) {
   compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-    hotMiddleware.publish({ action: 'reload' })
+    hotMiddleware.publish({action: 'reload'})
     cb()
   })
 })
@@ -62,7 +89,7 @@ compiler.plugin('compilation', function (compilation) {
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
   if (typeof options === 'string') {
-    options = { target: options }
+    options = {target: options}
   }
   app.use(proxyMiddleware(options.filter || context, options))
 })
