@@ -12,8 +12,16 @@
               </div>
               <div class="view-auth">
                 <el-table :data="serviceData.viewAuth" border style="width: 100%">
-                  <el-table-column label="ID" align="center" prop="index"></el-table-column>
-                  <el-table-column label="菜单" align="center" prop="name"></el-table-column>
+                  <el-table-column label="ID" align="center">
+                    <template scope="scope">
+                      <span>{{scope.row.index}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="菜单" align="center">
+                    <template scope="scope">
+                      <span>{{scope.row.name}}</span>
+                    </template>
+                  </el-table-column>
                 </el-table>
               </div>
             </el-tab-pane>
@@ -52,7 +60,7 @@
       <!--待审权限-->
       <el-tab-pane name="second">
         <span slot="label">
-          <el-badge :value="serviceData.operateAuth.length + serviceData.operateAuth.length" class="item" size="small">
+          <el-badge :value="pendingNum" class="item" size="small">
             <div style="margin: -10px 0;">待审权限</div>
           </el-badge>
         </span>
@@ -118,7 +126,7 @@
       <!--被驳回权限-->
       <el-tab-pane name="third">
         <span slot="label">
-          <el-badge :value="serviceData.operateAuth.length + serviceData.operateAuth.length" class="item" size="small">
+          <el-badge :value="rejectNum" class="item" size="small">
             <div style="margin: -5px 0;">被驳回权限</div>
           </el-badge>
         </span>
@@ -180,6 +188,8 @@
         subActive: 'subFirst',
         searchInput: '',
         serviceData: {},
+        pendingNum: 0,
+        rejectNum: 0,
         authType: [{
           id: 1,
           menu: '订单查询'
@@ -247,12 +257,27 @@
         }, response => {
           // error callback
         });
+      },
+      change () {
+      },
+      dataNum () {
+        return this.serviceData ? (this.serviceData.viewAuth.length + this.serviceData.operateAuth.length) : 0;
       }
     },
     created () {
       // 页面载入获取我的权限-->查看权限列表
       this.$http.get('/api/myAuthData?authType=myAuth').then(response => {
         this.serviceData = response.body.data;
+      }, response => {
+        // error callback
+      });
+
+      // 获取待审权限和被驳回条目的数目
+      this.$http.get('/api/dataNum').then(response => {
+        this.pendingNum = response.body.data.pendingNum;
+        this.rejectNum = response.body.data.rejectNum;
+        console.log(this.pendingNum);
+        console.log(this.rejectNum);
       }, response => {
         // error callback
       });

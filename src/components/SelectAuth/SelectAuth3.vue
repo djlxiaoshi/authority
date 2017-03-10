@@ -12,19 +12,19 @@
       </div>
       <div class="box-body">
         <ul class="left-part">
-          <li @click="switchMenu($event,0)" :class="{active: changeFlag === 0}"><a href="javascript:void(0)">请选择游戏</a>
+          <li @click="switchMenu($event,index)" :class="{active: changeFlag === index}" v-for="(item, index) in menuData"><a href="javascript:void(0)">{{item.menuName}}{{index}}</a>
           </li>
-          <li @click="switchMenu($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择平台</a>
-          </li>
-          <li @click="switchMenu($event,2)" :class="{active: changeFlag === 2}"><a href="javascript:void(0)">请选择大厅</a>
-          </li>
-          <li @click="switchMenu($event,3)" :class="{active: changeFlag === 3}"><a href="javascript:void(0)">请选择终端</a>
-          </li>
-          <li @click="switchMenu($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择应用包</a>
-          </li>
-          <li @click="switchMenu($event,5)" :class="{active: changeFlag === 5}"><a
-            href="javascript:void(0)">请选择APPID</a>
-          </li>
+          <!--<li @click="switchMenu($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择平台</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,2)" :class="{active: changeFlag === 2}"><a href="javascript:void(0)">请选择大厅</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,3)" :class="{active: changeFlag === 3}"><a href="javascript:void(0)">请选择终端</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择应用包</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,5)" :class="{active: changeFlag === 5}"><a-->
+            <!--href="javascript:void(0)">请选择APPID</a>-->
+          <!--</li>-->
         </ul>
         <div class="right-part">
           <div class="data-list">
@@ -69,6 +69,8 @@
         changeFlag: 0,
         showSelectAuthBox: false,
         serviceData: [],
+        menuData: {},
+        // 通过上级选择后的筛选信息
         filterMsg: {},
         lastFilterMsg: false,
         authSelect: [
@@ -188,6 +190,13 @@
       // 发送ajax请求，后台提取数据
       this.$http.get('/api/serviceData?index=0').then(response => {
         this.serviceData = response.body.data;
+      }, response => {
+        // error callback
+      });
+
+      // 发送ajax请求，获取菜单选项
+      this.$http.get('/api/menuData').then(response => {
+        this.menuData = response.body.data;
       }, response => {
         // error callback
       });

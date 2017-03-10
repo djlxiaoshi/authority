@@ -12,6 +12,7 @@ var url = require('url')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
+var _u = require('underscore')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -23,12 +24,15 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-var appData = require('../data.json');
-var serviceData = appData.serviceData;
+// 权限申请数据
+var appData = require('../src/mock/selectAuth.json');
+var authSelectorData = appData.authSelectorData;
+
+// 权限菜单选项数据
+var menuData = appData.parentOpt;
 
 // 我的权限数据
 var myAuthData = require('../src/mock/myauth.json').authData;
-console.log(myAuthData);
 
 var apiRoutes = express.Router();
 
@@ -37,7 +41,16 @@ apiRoutes.get('/serviceData', function (req, res) {
   var _index = params.index;
   res.json({
     errno: 0,
-    data: serviceData[_index]
+    data: authSelectorData[_index]
+  });
+});
+
+apiRoutes.get('/menuData', function (req, res) {
+  var params = url.parse(req.url, true).query;
+  var _index = params.index;
+  res.json({
+    errno: 0,
+    data: menuData
   });
 });
 
@@ -60,6 +73,16 @@ apiRoutes.get('/withdraw', function (req, res) {
     errno: 0,
     // 看这里要不要把更新后的数据在获取一遍，传给前端。
     // data: myAuthData[_authType]
+  });
+});
+
+apiRoutes.get('/dataNum', function (req, res) {
+  res.json({
+    errno: 0,
+    data: {
+      pendingNum: !_u.isEmpty(myAuthData.pendingAuth) ? myAuthData.pendingAuth.viewAuth.length + myAuthData.pendingAuth.operateAuth.length : 0,
+      rejectNum: !_u.isEmpty(myAuthData.rejectAuth) ? myAuthData.rejectAuth.viewAuth.length + myAuthData.rejectAuth.operateAuth.length : 0
+    }
   });
 });
 
