@@ -26,7 +26,7 @@ var app = express()
 
 // 权限申请数据
 var appData = require('../src/mock/selectAuth.json');
-var authSelectorData = appData.authSelectorData;
+var filterResultData = appData.filterResultData;
 
 // 权限菜单选项数据
 var menuData = appData.parentOpt;
@@ -36,12 +36,12 @@ var myAuthData = require('../src/mock/myauth.json').authData;
 
 var apiRoutes = express.Router();
 
-apiRoutes.get('/serviceData', function (req, res) {
+apiRoutes.get('/filterData', function (req, res) {
   var params = url.parse(req.url, true).query;
   var _index = params.index;
   res.json({
     errno: 0,
-    data: authSelectorData[_index]
+    data: filterResultData[_index]
   });
 });
 

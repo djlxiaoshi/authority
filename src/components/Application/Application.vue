@@ -321,13 +321,11 @@
             message: '申请理由不能为空',
             type: 'warning'
           });
-          console.log('由于无申请理由，申请被拒');
         } else {
           this.$message({
             message: '申请成功',
             type: 'success'
           });
-          console.log('申请成功');
           console.log('这就是一条后台数据');
           console.log(_oneApply);
         }

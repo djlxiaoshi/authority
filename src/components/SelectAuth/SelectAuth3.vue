@@ -12,7 +12,7 @@
       </div>
       <div class="box-body">
         <ul class="left-part">
-          <li @click="switchMenu($event,index)" :class="{active: changeFlag === index}" v-for="(item, index) in menuData"><a href="javascript:void(0)">{{item.menuName}}{{index}}</a>
+          <li @click="switchMenu($event,index)" :class="{active: changeFlag === index}" v-for="(item, index) in menuData"><a href="javascript:void(0)">{{item.labelName}}</a>
           </li>
           <!--<li @click="switchMenu($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择平台</a>-->
           <!--</li>-->
@@ -29,16 +29,16 @@
         <div class="right-part">
           <div class="data-list">
             <div v-show="changeFlag === index" v-for="(item, index) in authSelect">
-              <el-checkbox :indeterminate="isIndeterminate(index, serviceData)"
+              <el-checkbox :indeterminate="isIndeterminate(index, filterData)"
                            v-model="authSelect[index]['isAll']"
-                           @change="handleCheckAllChange($event, serviceData, authSelect[index])">全选/全不选
+                           @change="handleCheckAllChange($event, filterData, authSelect[index])">全选/全不选
               </el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search" v-model="input"></el-input>
               </div>
               <el-checkbox-group v-model="authSelect[index]['checked']"
-                                 @change="handleCheckedCitiesChange(serviceData, authSelect[index])">
-                <div v-for="item in serviceData" v-show="result(item)">
+                                 @change="handleCheckedCitiesChange(filterData, authSelect[index])">
+                <div v-for="item in filterData" v-show="result(item)">
                   <el-checkbox :label="item"></el-checkbox>
                 </div>
               </el-checkbox-group>
@@ -54,51 +54,20 @@
 </template>
 
 <script type="text/ecmascript-6">
-  //  const gameType = ['德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
-  //  const platformType = ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'];
-  //  const hallType = ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'];
-  //  const terminalType = ['IOS', 'PC', 'ANDRIOD'];
-  //  const appPackageType = ['360', '新浪', '腾讯'];
-  //  const appidType = ['德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1432）', '德州扑克-ANDROID-VIVO联运-简体（1353）', '德州扑克-ANDROID-华为联运-简体（1455）'];
-  // import {deepClone} from 'common/js/utils';
-  // import _u from 'underscore';
   export default {
     data () {
       return {
+        // 双向绑定搜索框
         input: '',
         changeFlag: 0,
         showSelectAuthBox: false,
-        serviceData: [],
-        menuData: {},
+        filterData: [],
+        menuData: [],
         // 通过上级选择后的筛选信息
-        filterMsg: {},
+        filterMsg: [],
         lastFilterMsg: false,
-        authSelect: [
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          }
-        ]
+        // 多选框，V-model双向绑定队列
+        authSelect: []
       };
     },
     methods: {
@@ -107,7 +76,11 @@
       },
       switchMenu ($event, num) {
         let _this = this;
-        let typeLists = ['game', 'platform', 'hall', 'terminal', 'appPackage', 'appid'];
+        // 这里的数据应该由后台传来的父菜单信息决定
+        let _typeLists = [];
+        this.menuData.forEach((value) => {
+          _typeLists.push(value.menuName);
+        });
 
         $event.target.style.background = 'lightgreeen';
         this.changeFlag = num;
@@ -115,9 +88,10 @@
 
         // 携带查询数据,在这里是可以判断数据是否变化
         this.authSelect.forEach((value, index) => {
+          let _type = _typeLists[index];
+          value.type = _type;
           if (value.checked.length) {
-            console.log(typeLists[index]);
-            _this['filterMsg'][typeLists[index]] = value;
+            _this['filterMsg'].push(value);
           }
         });
 
@@ -125,9 +99,9 @@
         console.dir(_this['filterMsg']);
 
         // 后台获取数据
-        this.$http.get(`/api/serviceData?index=${num}`).then(response => {
+        this.$http.get(`/api/filterData?index=${num}`).then(response => {
           console.dir(response.body.data);
-          this.serviceData = response.body.data;
+          this.filterData = response.body.data;
         }, response => {
           // error callback
         });
@@ -188,15 +162,26 @@
     props: ['parentRouter'],
     created () {
       // 发送ajax请求，后台提取数据
-      this.$http.get('/api/serviceData?index=0').then(response => {
-        this.serviceData = response.body.data;
+      this.$http.get('/api/filterData?index=0').then(response => {
+        this.filterData = response.body.data;
       }, response => {
         // error callback
       });
 
       // 发送ajax请求，获取菜单选项
       this.$http.get('/api/menuData').then(response => {
+        // 保存this指针
+        let _this = this;
+        // 拿到菜单数据
         this.menuData = response.body.data;
+        // 动态创建选中状态队列
+        this.menuData.forEach(() => {
+          // 每一个v-model绑定对象初始化,这里要循环创建，不然是按引用传递，会相互影响
+          let _checkedItem = {};
+          _checkedItem.checked = [];
+          _checkedItem.isAll = false;
+          _this.authSelect.push(_checkedItem);
+        });
       }, response => {
         // error callback
       });

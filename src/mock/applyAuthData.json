@@ -1,40 +1,7 @@
 {
-  "selectData":[
-    {
-      "modelChecked": ["德州扑克"],
-      "isAll":false
-    },
-    {
-      "modelChecked": [],
-      "isAll":false
-    },
-    {
-      "modelChecked": [],
-      "isAll":false
-    },
-    {
-      "modelChecked": [],
-      "isAll":false
-    },
-    {
-      "modelChecked": [],
-      "isAll":false
-    },
-    {
-      "modelChecked": [],
-      "isAll":false
-    }
-  ],
-  "filterResultData": [
-    ["德州扑克", "斗地主", "地方棋牌", "印尼棋牌", "IPOKER", "四人斗地主", "三公", "麻将", "博定"],
-    ["全国平台", "湖北平台", "四川平台", "深圳平台", "广东平台", "海南平台", "澳门平台", "宜宾平台", "宜昌平台", "其他平台"],
-    ["三人厅", "四人厅", "五人厅", "六人厅", "七人厅", "八人厅", "九人厅", "十人厅", "更大厅"],
-    ["IOS", "PC", "ANDRIOD"],
-    ["360", "新浪", "腾讯"],
-    ["德州扑克-PC-新浪微博-简体（1232）", "德州扑克-ANDROID-VIVO联运-简体（1333）", "德州扑克-ANDROID-华为联运-简体（1235）", "德州扑克-ANDROID-主版本-简体（1499）", "德州扑克-PC-新浪微博-简体（1432）", "德州扑克-ANDROID-VIVO联运-简体（1353）", "德州扑克-ANDROID-华为联运-简体（1455）"]
-  ],
+  // 菜单选项数据，说不定只需要父菜单的数据
   "parentOpt": [
-     {
+    {
       "menuId": 1,
       "menuName": "game",
       "labelName": "请选择游戏",
@@ -64,10 +31,28 @@
       "labelName": "请选择应用包",
       "subOpt": ["360", "新浪", "腾讯"]
     },
-     {
+    {
       "menuId": 6,
       "menuName": "appid",
       "labelName": "请选择APPID",
       "subOpt": ["德州扑克-PC-新浪微博-简体（1232）", "德州扑克-ANDROID-VIVO联运-简体（1333）", "德州扑克-ANDROID-华为联运-简体（1235）", "德州扑克-ANDROID-主版本-简体（1499）", "德州扑克-PC-新浪微博-简体（1432）", "德州扑克-ANDROID-VIVO联运-简体（1353）", "德州扑克-ANDROID-华为联运-简体（1455）"]
-    }]
+    }],
+  // 传到后台的选择器筛选数据
+  "filterMsg":[
+    {
+      "type": "game",
+      "checked": ["德州扑克", "斗地主"],
+      "isAll": false
+    }
+  ],
+  // 通过filterMsg返回的筛选信息
+  "filterResult": ["筛选数据1", "筛选数据2", "筛选数据3"],
+  // 最后提交的申请数据
+  "applyItem": [
+    {
+      "viewAuth": [],   //查看权限
+      "operateAuth": [],    //就是一个APPID，每一项由‘-’分开，例如："德州扑克-PC-新浪微博-简体（1232）"
+      "applyReason": ""
+    }
+  ]
 }
