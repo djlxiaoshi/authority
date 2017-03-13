@@ -149,14 +149,20 @@
       ]
     }
   ],
-  "filterMsg": [
+  "filterData": [
     {
-      "type": "game",
-      "checked": [
-        "德州扑克",
-        "斗地主"
-      ],
-      "isAll": false
+      "currentMenu": {
+        "parentMenuId": 371,
+        "parentMenuName": "game"
+      },
+      "filterMsg": {
+        "menuName": "game",
+        "checked": [
+          "德州扑克",
+          "斗地主"
+        ],
+        "isAll": false
+      }
     }
   ],
   "filterResult": [

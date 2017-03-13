@@ -29,9 +29,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // 权限申请数据
-var appData = require('../src/mock/selectAuth.json');
-var filterResultData = appData.filterResultData;
-
 var authApplyData = require('../src/mock/applyAuthData.json');
 
 // 权限菜单选项数据
@@ -53,21 +50,20 @@ apiRoutes.post('/apply/viewAuthApply', function (req, res) {
   res.json({
     errno: 0
   });
+  console.dir(req.body);
+});
+
+apiRoutes.post('/apply/operateAuthApply', function (req, res) {
+  res.json({
+    errno: 0
+  });
+  console.dir(req.body);
 });
 
 apiRoutes.get('/apply/viewAuth', function (req, res) {
   res.json({
     errno: 0,
     data: authApplyData.viewAuth
-  });
-});
-
-apiRoutes.get('/filterData', function (req, res) {
-  var params = url.parse(req.url, true).query;
-  var _index = params.index;
-  res.json({
-    errno: 0,
-    data: filterResultData[_index]
   });
 });
 

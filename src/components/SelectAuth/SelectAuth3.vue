@@ -130,17 +130,15 @@
       },
       addSelect () {
         // 判断是否填写完整
-        let _msg = ['游戏', '平台', '大厅', '终端', '应用包', 'APPID'];
-        let _data = this.authSelect;
-        for (let index = 0; index < _data.length; index++) {
-          if (_data[index]['checked'].length === 0) {
-            this.$message({
-              message: `请至少选择一种${_msg[index]}`,
-              type: 'warning'
-            });
-            return;
-          }
+        let _appidData = this.authSelect.slice(-1);
+        if (_appidData[0]['checked']['length'] === 0) {
+          this.$message({
+            message: '请至少选择一种APPID',
+            type: 'warning'
+          });
+          return;
         }
+
         // 触发父组件事件
         this.$emit('addSelData', this.authSelect);
         // 所有复选框复位
@@ -173,20 +171,20 @@
           _checkedItem.menuName = value.menuName;
           _this.authSelect.push(_checkedItem);
         });
-
+      }, response => {
+        // error callback
+      }).then(response => {
         _filterData.currentMenu = {
           'parentMenuId': _this['menuData'][0]['menuId'],
           'parentMenuName': _this['menuData'][0]['menuName']
         };
         _filterData.filterMsg = _this.authSelect;
         // 发送ajax请求，后台提取数据
-        _this.$http.post('/api/apply/subOpt', {name: 'djlxs'}).then(response => {
+        _this.$http.post('/api/apply/subOpt', _filterData).then(response => {
           _this.subOpt = response.body.data;
         }, response => {
           // error callback
         });
-      }, response => {
-        // error callback
       });
     },
     watch: {

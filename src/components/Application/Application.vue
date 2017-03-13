@@ -38,7 +38,7 @@
               <tr v-for="(item, index) in viewAuth">
                 <td>{{index + 1}}</td>
                 <td>
-                  <el-checkbox :checked="item.have" v-model.sync="item.have">{{item.authName}}</el-checkbox>
+                  <el-checkbox :checked="item.have" v-model.sync="item.have" @change="showPrompt">{{item.authName}}</el-checkbox>
                 </td>
               </tr>
             </template>
