@@ -3,19 +3,19 @@
     <div class="applicant-msg">
       <h5>申请人</h5>
       <hr>
-      <span class="applicant-name">姓名：杜思睿（AnneDu）（后台数据）</span>
-      <span class="department">部门：（后台数据）</span>
+      <span class="applicant-name">姓名：{{userMsg.name}}</span>
+      <span class="department">部门：{{userMsg.department}}</span>
     </div>
     <div class="authority">
-      <h5>申请内容：</h5>
-      <hr>
-      <h5>应用权限</h5>
-      <p class="authority-text">
-        支付后台APPID权限，会根据数据后台的BPID权限自动开通，如果没有某个应用的appid权限，请自行去data后台开通对应的bpid权限，如果在数据后台开通权限后，在支付后台还是提示无权限，请退出账号，清空浏览器缓存，重新登录一下即可查看；如果有疑问，请及时联系AnneDu，谢谢。</p>
+      <p style="line-height: 1.5rem;">
+        <span style="font-weight:700">申请内容：</span>
+        <span style="font-weight:700">应用权限</span>
+        支付后台APPID权限，会根据数据后台的BPID权限自动开通，如果没有某个应用的appid权限，请自行去data后台开通对应的bpid权限，如果在数据后台开通权限后，在支付后台还是提示无权限，请退出账号，清空浏览器缓存，重新登录一下即可查看；如果有疑问，请及时联系AnneDu，谢谢。
+      </P>
     </div>
 
 
-    <el-tabs value="first" style="min-height:400px">
+    <el-tabs value="first" style="min-height:400px" @tab-click="tabSwitch">
       <el-tab-pane label="查询权限" name="first">
         <div class="view-content">
           <table class="ui single line celled table" style="width: 400px;">
@@ -53,12 +53,23 @@
             </tfoot>
           </table>
         </div>
+        <!--申请理由-->
+        <div class="application-reason-wrap">
+          <el-input type="textarea" :rows="7" placeholder="请输入内容" v-model="viewAuthReason"></el-input>
+        </div>
+
+        <div class="bottom-btn-wrap">
+          <el-button type="primary" @click="cancelApply">取消</el-button>
+          <el-button type="primary" @click="viewAuthApply">提出申请</el-button>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="操作权限" name="second">
+        <!--权限选择器-->
         <div class="select-auth-wrap">
           <!--<Select-auth parent-router="home"></Select-auth>-->
           <select-auth3 v-on:addSelData="addSelData"></select-auth3>
         </div>
+        <!--待添加权限-->
         <div class="add-auth-wrap">
           <el-table :data="waitingAdd" border style="width: 100%">
             <el-table-column label="游戏" align="center">
@@ -164,19 +175,20 @@
             </el-table-column>
           </el-table>
         </div>
+
+        <!--申请理由-->
+        <div class="application-reason-wrap">
+          <el-input type="textarea" :rows="7" placeholder="请输入内容" v-model="operateAuthReason"></el-input>
+        </div>
+
+        <div class="bottom-btn-wrap">
+          <el-button type="primary" @click="cancelApply">取消</el-button>
+          <el-button type="primary" @click="operateAuthApply">提出申请</el-button>
+        </div>
       </el-tab-pane>
     </el-tabs>
 
 
-    <!--申请理由-->
-    <div class="application-reason-wrap">
-      <el-input type="textarea" :rows="7" placeholder="请输入内容" v-model="applyReason"></el-input>
-    </div>
-
-    <div class="bottom-btn-wrap">
-      <el-button type="primary" @click="cancelApply">取消</el-button>
-      <el-button type="primary" @click="apply">提出申请</el-button>
-    </div>
   </div>
 </template>
 
@@ -188,47 +200,13 @@
     data () {
       return {
         showFlag: false,
-        applyReason: '',
+        viewAuthReason: '',
+        operateAuthReason: '',
+        userMsg: {},
         checkList: [],
         waitingAdd: [],
         addedData: [],
-        viewAuth: [
-          {
-            id: 1,
-            authName: '订单查询',
-            have: true
-          },
-          {
-            id: 2,
-            authName: '欺诈订单',
-            have: true
-          },
-          {
-            id: 3,
-            authName: '统计信息',
-            have: true
-          },
-          {
-            id: 4,
-            authName: '产品配置',
-            have: false
-          },
-          {
-            id: 5,
-            authName: '收入汇总',
-            have: false
-          },
-          {
-            id: 6,
-            authName: '应用警报设置',
-            have: false
-          },
-          {
-            id: 7,
-            authName: '财务对账',
-            have: false
-          }
-        ]
+        viewAuth: []
       };
     },
     components: {
@@ -298,19 +276,13 @@
           window.alert('点错了');
         });
       },
-      apply () {
+      operateAuthApply () {
         // 整合数据 addedData(操作权限) + 查看权限  +  申请理由
         let _oneApply = {};
         _oneApply.operateAuthLists = this.addedData;
-        _oneApply.viewAuth = this.viewAuth;
-        _oneApply.applyReason = this.applyReason;
+        _oneApply.applyReason = this.operateAuthReason;
 
-        // 判断是否为空
-        let haveViewAuth = _oneApply.viewAuth.some((value) => {
-          return value.have;
-        });
-
-        if (_oneApply.operateAuthLists.length === 0 && !haveViewAuth) {
+        if (_oneApply.operateAuthLists.length === 0) {
           this.$message({
             message: '请至少选择一种权限',
             type: 'warning'
@@ -328,13 +300,71 @@
           });
           console.log('这就是一条后台数据');
           console.log(_oneApply);
+
+          // 满足申请条件，发送ajax请求
+          this.$http.post('/api/apply/operateAuthApply', _oneApply).then(response => {
+
+          }, response => {
+            // error callback
+          });
         }
-        // 本地缓存
-        // window.localStorage.applyLists = [];
-        // window.localStorage.applyLists.push(_oneApply);
-        //  console.log('提交数据给后台，利用本地缓存来做');
-        // console.log('我的权限数据应该是从后台取数据');
+      },
+      viewAuthApply () {
+        let _this = this;
+        // 整合数据 查看权限  +  申请理由
+        let _oneApply = {};
+        _oneApply.viewAuth = this.viewAuth;
+        _oneApply.applyReason = this.viewAuthReason;
+
+        // 判断查看权限是否为空
+        let _isNotEmpty = this.viewAuth.some((item) => {
+          return item.have;
+        });
+        if (!_isNotEmpty) {
+          this.$message({
+            message: '请至少选择一种权限',
+            type: 'warning'
+          });
+          console.log('由于无权限申请，申请被拒');
+        } else if (_oneApply.applyReason.trim() === '') {
+          this.$message({
+            message: '申请理由不能为空',
+            type: 'warning'
+          });
+        } else {
+          console.log('这就是一条后台数据');
+          console.log(_oneApply);
+
+          // 满足申请条件，发送ajax请求
+          this.$http.post('/api/apply/viewAuthApply', _oneApply).then(response => {
+            if (response.errno === 0) {
+              _this.$message({
+                message: '申请成功',
+                type: 'success'
+              });
+            }
+          }, response => {
+            // error callback
+          });
+        }
+      },
+      tabSwitch () {
       }
+    },
+    created () {
+      // 获取申请人基本信息
+      this.$http.get('/api/apply/userMsg').then(response => {
+        this.userMsg = response.body.data;
+      }, response => {
+        // error callback
+      });
+
+      // 获取申请人已拥有的查看权限
+      this.$http.get('/api/apply/viewAuth').then(response => {
+        this.viewAuth = response.body.data;
+      }, response => {
+        // error callback
+      });
     }
   };
 </script>

@@ -8,6 +8,7 @@ if (!process.env.NODE_ENV) {
 var opn = require('opn')
 var path = require('path')
 var express = require('express')
+var bodyParser = require('body-parser');
 var url = require('url')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -22,19 +23,44 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = config.dev.proxyTable
 
+
 var app = express()
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // 权限申请数据
 var appData = require('../src/mock/selectAuth.json');
 var filterResultData = appData.filterResultData;
 
+var authApplyData = require('../src/mock/applyAuthData.json');
+
 // 权限菜单选项数据
-var menuData = appData.parentOpt;
+var menuData = authApplyData.parentMenu;
 
 // 我的权限数据
 var myAuthData = require('../src/mock/myauth.json').authData;
 
 var apiRoutes = express.Router();
+
+apiRoutes.get('/apply/userMsg', function (req, res) {
+  res.json({
+    errno: 0,
+    data: authApplyData.userMsg
+  });
+});
+
+apiRoutes.post('/apply/viewAuthApply', function (req, res) {
+  res.json({
+    errno: 0
+  });
+});
+
+apiRoutes.get('/apply/viewAuth', function (req, res) {
+  res.json({
+    errno: 0,
+    data: authApplyData.viewAuth
+  });
+});
 
 apiRoutes.get('/filterData', function (req, res) {
   var params = url.parse(req.url, true).query;
@@ -45,13 +71,18 @@ apiRoutes.get('/filterData', function (req, res) {
   });
 });
 
-apiRoutes.get('/menuData', function (req, res) {
-  var params = url.parse(req.url, true).query;
-  var _index = params.index;
+apiRoutes.get('/apply/parentMenu', function (req, res) {
   res.json({
     errno: 0,
-    data: menuData
+    data: authApplyData.parentMenu
   });
+});
+
+apiRoutes.post('/apply/subOpt', function (req, res) {
+  res.json({
+    errno: 0
+  });
+  console.dir(req.body);
 });
 
 apiRoutes.get('/myAuthData', function (req, res) {
@@ -73,6 +104,35 @@ apiRoutes.get('/withdraw', function (req, res) {
     errno: 0,
     // 看这里要不要把更新后的数据在获取一遍，传给前端。
     // data: myAuthData[_authType]
+  });
+});
+
+apiRoutes.get('/searchData', function (req, res) {
+  var params = url.parse(req.url, true).query;
+  var _tagType = params.tagType;
+  var _searchKey = params.searchKey;
+  // 接下来执行数据库查询操作
+  console.log('tagType:' + _tagType + 'searchKey:' + _searchKey);
+  res.json({
+    errno: 0,
+    // 数据
+     data:{
+       "viewAuth": [],
+       "operateAuth": [
+         {
+           "uuid":1,
+           "game": "地方棋牌",
+           "platform": "四川",
+           "hall": "全部",
+           "terminal": "全部",
+           "appPackage": "全部",
+           "APPID": "全部",
+           "auth": ["订单操作"],
+           "status": 1,
+           "handler": "查询数据",
+           "reason": "我想申请这些操作权限1"
+         }]
+    }
   });
 });
 

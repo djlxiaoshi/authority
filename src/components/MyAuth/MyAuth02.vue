@@ -3,64 +3,56 @@
     <el-tabs v-model="activeName" @tab-click="getMyAuthData">
       <!--我的权限-->
       <el-tab-pane label="我的权限" name="first">
-        <div class="own-auth">
-          <h4>已有权限列表</h4>
-          <el-tabs v-model="subActive" type="border-card">
-            <el-tab-pane label="查看权限" name="subFirst">
-              <div class="search-input clearfix">
-                <el-input placeholder="请输入关键字" icon="search" v-model="searchInput"></el-input>
-              </div>
-              <div class="view-auth">
-                <el-table :data="serviceData.viewAuth" border style="width: 100%">
-                  <el-table-column label="ID" align="center">
-                    <template scope="scope">
-                      <span>{{scope.row.index}}</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="菜单" align="center">
-                    <template scope="scope">
-                      <span>{{scope.row.name}}</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-              <div class="pagination-wrap">
-                <el-pagination layout="prev, pager, next" :total="20" :page-size="pageSize" @current-change="switchPage" style="display: inline-block;"></el-pagination>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="操作权限" name="subSecond">
-              <div class="search-input">
-                <el-input placeholder="请输入关键字" icon="search"></el-input>
-              </div>
-              <div class="operate-auth">
-                <el-table :data="serviceData.operateAuth" border style="width: 100%">
-                  <el-table-column label="游戏" prop="game" align="center"></el-table-column>
-                  <el-table-column label="平台" prop="platform" align="center"></el-table-column>
-                  <el-table-column label="大厅" prop="hall" align="center"></el-table-column>
-                  <el-table-column label="终端" prop="terminal" align="center"></el-table-column>
-                  <el-table-column label="应用包" prop="appPackage" align="center"></el-table-column>
-                  <el-table-column label="APPID应用" prop="APPID" align="center"></el-table-column>
-                  <el-table-column label="权限内容" align="center">
-                    <el-table-column label="权限1" align="center">
-                      <template scope="scope">
-                        <el-checkbox>发货退款</el-checkbox>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="权限2" align="center">
-                      <template scope="scope">
-                        <el-checkbox>报警设置</el-checkbox>
-                      </template>
-                    </el-table-column>
-                  </el-table-column>
-                  <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
-                </el-table>
-              </div>
-              <div class="pagination-wrap">
-                <el-pagination layout="prev, pager, next" :total="20" :page-size="pageSize" @current-change="switchPage" style="display: inline-block;"></el-pagination>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
-
+        <div class="own-auth" >
+          <!--搜索框-->
+          <div class="clearfix">
+            <el-input class="search-input" placeholder="请输入关键字" icon="search" v-model="searchInput" ></el-input>
+          </div>
+          <!--查看权限-->
+          <div class="view-auth-wrap">
+            <h3 class="auth-title">查看权限</h3>
+            <el-table :data="serviceData.viewAuth" border style="width: 100%">
+              <el-table-column label="ID" align="center">
+                <template scope="scope">
+                  <span>{{scope.row.index}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="菜单" align="center">
+                <template scope="scope">
+                  <span>{{scope.row.name}}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <!--操作权限-->
+          <div class="operate-auth-wrap">
+            <h3 class="auth-title">操作权限</h3>
+            <el-table :data="serviceData.operateAuth" border style="width: 100%">
+              <el-table-column label="游戏" prop="game" align="center"></el-table-column>
+              <el-table-column label="平台" prop="platform" align="center"></el-table-column>
+              <el-table-column label="大厅" prop="hall" align="center"></el-table-column>
+              <el-table-column label="终端" prop="terminal" align="center"></el-table-column>
+              <el-table-column label="应用包" prop="appPackage" align="center"></el-table-column>
+              <el-table-column label="APPID应用" prop="APPID" align="center"></el-table-column>
+              <el-table-column label="权限内容" align="center">
+                <el-table-column label="权限1" align="center">
+                  <template scope="scope">
+                    <el-checkbox>发货退款</el-checkbox>
+                  </template>
+                </el-table-column>
+                <el-table-column label="权限2" align="center">
+                  <template scope="scope">
+                    <el-checkbox>报警设置</el-checkbox>
+                  </template>
+                </el-table-column>
+              </el-table-column>
+              <el-table-column label="业务审核人" prop="assessor" align="center"></el-table-column>
+            </el-table>
+          </div>
+          <!--分页-->
+          <div class="pagination-wrap">
+            <el-pagination layout="prev, pager, next" :total="20" :page-size="pageSize" @current-change="switchPage" style="display: inline-block;"></el-pagination>
+          </div>
         </div>
       </el-tab-pane>
 
@@ -72,8 +64,8 @@
           </el-badge>
         </span>
         <!--搜索框-->
-        <div class="search-input clearfix">
-          <el-input placeholder="请输入关键字" icon="search" size="small" class="search-input" @click="search('pendingAuth')" v-model="searchInput"></el-input>
+        <div class="clearfix">
+          <el-input class="search-input" placeholder="请输入关键字" icon="search"  @click="search('pendingAuth')" v-model="searchInput"></el-input>
         </div>
 
         <div class="view-auth-wrap">
@@ -137,8 +129,8 @@
             <div style="margin: -5px 0;">被驳回权限</div>
           </el-badge>
         </span>
-        <div class="clearfix ">
-          <el-input placeholder="请输入关键字" icon="search" size="small" class="search-input"></el-input>
+        <div class="clearfix">
+          <el-input class="search-input" placeholder="请输入关键字" icon="search"></el-input>
         </div>
         <!--被驳回的查看权限-->
         <div class="view-auth-wrap">
@@ -319,17 +311,16 @@
     .own-auth
       h4
         margin: 10px 0
-      .pagination-wrap
-        text-align: center
-        margin:20px
     .search-input
       width: 300px
       float: right
       margin-bottom: 10px
     .view-auth-wrap, .operate-auth-wrap
       border: 1px solid #e5e5e5
-      margin-top: 20px;
-      margin-bottom: 10px
+      margin: 20px;
       .auth-title
-        margin: 20px
+        margin: 15px
+    .pagination-wrap
+      text-align: center
+      margin:20px
 </style>

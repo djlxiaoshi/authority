@@ -12,7 +12,7 @@
       </div>
       <div class="box-body">
         <ul class="left-part">
-          <li @click="switchMenu($event,index)" :class="{active: changeFlag === index}" v-for="(item, index) in menuData"><a href="javascript:void(0)">{{item.labelName}}</a>
+          <li @click="switchMenu($event,index)" :class="{active: changeFlag === index}" v-for="(item, index) in menuData"><a href="javascript:void(0)">请选择{{item.labelName}}</a>
           </li>
           <!--<li @click="switchMenu($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择平台</a>-->
           <!--</li>-->
@@ -38,7 +38,7 @@
               </div>
               <el-checkbox-group v-model="authSelect[index]['checked']"
                                  @change="handleCheckedCitiesChange(filterData, authSelect[index])">
-                <div v-for="item in filterData" v-show="result(item)">
+                <div v-for="item in subOpt" v-show="result(item)">
                   <el-checkbox :label="item"></el-checkbox>
                 </div>
               </el-checkbox-group>
@@ -61,10 +61,10 @@
         input: '',
         changeFlag: 0,
         showSelectAuthBox: false,
-        filterData: [],
         menuData: [],
         // 通过上级选择后的筛选信息
-        filterMsg: [],
+        filterData: {},
+        subOpt: [],
         lastFilterMsg: false,
         // 多选框，V-model双向绑定队列
         authSelect: []
@@ -75,33 +75,27 @@
         this.showSelectAuthBox = !this.showSelectAuthBox;
       },
       switchMenu ($event, num) {
-        let _this = this;
-        // 这里的数据应该由后台传来的父菜单信息决定
-        let _typeLists = [];
-        this.menuData.forEach((value) => {
-          _typeLists.push(value.menuName);
-        });
+        // let _this = this;
+        // 传给后台的信息
+        let _filterData = {};
 
         $event.target.style.background = 'lightgreeen';
         this.changeFlag = num;
         this.input = '';
 
-        // 携带查询数据,在这里是可以判断数据是否变化
-        this.authSelect.forEach((value, index) => {
-          let _type = _typeLists[index];
-          value.type = _type;
-          if (value.checked.length) {
-            _this['filterMsg'].push(value);
-          }
-        });
+        _filterData.currentMenu = {
+          'parentMenuId': this['menuData'][num]['menuId'],
+          'parentMenuName': this['menuData'][num]['menuName']
+        };
+
+        _filterData.filterMsg = this.authSelect;
 
         console.log('打印选择器需要传到后台的数据');
-        console.dir(_this['filterMsg']);
+        console.dir(_filterData);
 
-        // 后台获取数据
-        this.$http.get(`/api/filterData?index=${num}`).then(response => {
-          console.dir(response.body.data);
-          this.filterData = response.body.data;
+        // 后台获取数据,目前无数据，要后台给
+        this.$http.post('/api/apply/subOpt', _filterData).then(response => {
+          // _this.subOpt = response.body.data;
         }, response => {
           // error callback
         });
@@ -161,26 +155,35 @@
     computed: {},
     props: ['parentRouter'],
     created () {
-      // 发送ajax请求，后台提取数据
-      this.$http.get('/api/filterData?index=0').then(response => {
-        this.filterData = response.body.data;
-      }, response => {
-        // error callback
-      });
-
+      // 保存this指针
+      let _this = this;
+      let _filterData = {};
       // 发送ajax请求，获取菜单选项
-      this.$http.get('/api/menuData').then(response => {
-        // 保存this指针
-        let _this = this;
+      this.$http.get('/api/apply/parentMenu').then(response => {
         // 拿到菜单数据
-        this.menuData = response.body.data;
+        _this.menuData = response.body.data;
+        console.log('父级菜单信息');
+        console.log(this.menuData);
         // 动态创建选中状态队列
-        this.menuData.forEach(() => {
+        _this.menuData.forEach((value) => {
           // 每一个v-model绑定对象初始化,这里要循环创建，不然是按引用传递，会相互影响
           let _checkedItem = {};
           _checkedItem.checked = [];
           _checkedItem.isAll = false;
+          _checkedItem.menuName = value.menuName;
           _this.authSelect.push(_checkedItem);
+        });
+
+        _filterData.currentMenu = {
+          'parentMenuId': _this['menuData'][0]['menuId'],
+          'parentMenuName': _this['menuData'][0]['menuName']
+        };
+        _filterData.filterMsg = _this.authSelect;
+        // 发送ajax请求，后台提取数据
+        _this.$http.post('/api/apply/subOpt', {name: 'djlxs'}).then(response => {
+          _this.subOpt = response.body.data;
+        }, response => {
+          // error callback
         });
       }, response => {
         // error callback

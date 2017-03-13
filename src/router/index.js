@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Application from 'components/Application/Application';
-import MyAuth from 'components/MyAuth/MyAuth';
+// import MyAuth from 'components/MyAuth/MyAuth';
+import MyAuth2 from 'components/MyAuth/MyAuth02';
 import Approval from 'components/Approval/Approval';
 import Management from 'components/Management/Management';
 
@@ -53,7 +54,7 @@ export default new Router({
     {
       path: '/myauth',
       name: 'MyAuth',
-      component: MyAuth
+      component: MyAuth2
     },
     {
       path: '/approval',
