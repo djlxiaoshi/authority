@@ -2,55 +2,60 @@
   <div class='my-appoval container'>
     <h4>审批列表</h4>
     <hr>
-    <el-tabs v-model="activeName">
+    <el-tabs value="viewAuth" @tab-click="tabSwitch">
+
+      <!--公共部分-->
       <div class="batch-operate">
-        <el-checkbox>全选</el-checkbox>
-        <el-button type="primary" size="small">批量通过</el-button>
-        <el-button type="warning" size="small" @click="reject">批量驳回</el-button>
+        <el-button type="primary" size="small" @click="authPass(multipleSelection,true)">批量通过</el-button>
+        <el-button type="warning" size="small" @click="authReject(multipleSelection, true)">批量驳回</el-button>
       </div>
-      <div class="search-input clearfix" size="small">
-        <el-input placeholder="请输入关键字" icon="search"></el-input>
+      <div class="clearfix" size="small">
+        <el-input class="search-input" placeholder="请输入关键字" icon="search"></el-input>
       </div>
 
-      <el-tab-pane label="查看内容" name="first">
-        <div class="my-auth-wrap">
-          <el-table :data="viewData" border style="width: 100%" resizable="true" border>
-            <el-table-column label="选项" align="center" width="90">
-              <template scope="scope">
-                <el-checkbox></el-checkbox>
-              </template>
-            </el-table-column>
-            <el-table-column label="申请人" prop="applicant" align="center" width="120"></el-table-column>
-            <el-table-column label="申请人角色" prop="role" align="center"></el-table-column>
-            <el-table-column label="所属部门" prop="department" align="center"></el-table-column>
-            <el-table-column label="查看权限" prop="viewAuth" align="center">
-              <template scope="scope">
-                <div style="display: inline"><el-checkbox style="display: inline-block;vertical-align: middle">订单查询</el-checkbox></div>
-                <div style="display: inline"><el-checkbox style="display: inline-block;vertical-align: middle">欺诈订单</el-checkbox></div>
-                <div style="display: inline"><el-checkbox style="display: inline-block;vertical-align: middle">统计信息</el-checkbox></div>
-                <div style="display: inline"><el-checkbox style="display: inline-block;vertical-align: middle">收入汇总</el-checkbox></div>
-              </template>
-            </el-table-column>
-            <el-table-column label="申请时间" prop="applicationTime" align="center"></el-table-column>
-            <el-table-column label="申请理由" prop="applicateReason" align="center"></el-table-column>
-            <el-table-column label="操作" prop="operation" align="center">
-              <template scope="scope">
-                <el-button type="primary" size="mini">审核通过</el-button>
-                <el-button type="warning" size="mini">审核驳回</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+      <!--查看权限-->
+      <el-tab-pane name="viewAuth">
+        <span slot="label">
+          <el-badge :value="newMsg.arvView" class="item" size="small">
+            <div style="margin: -10px 0;">查看权限</div>
+          </el-badge>
+        </span>
+        <el-table :data="viewAuth" border style="width: 100%" resizable="true" border
+                  @selection-change="handleSelectionChange" @select="add">
+          <el-table-column label="选项" align="center" width="50" type="selection"></el-table-column>
+          <el-table-column label="申请人" prop="applicant" align="center" width="90"></el-table-column>
+          <el-table-column label="申请人角色" prop="role" align="center"></el-table-column>
+          <el-table-column label="所属部门" prop="department" align="center"></el-table-column>
+          <el-table-column label="查看权限" prop="viewAuth" align="left" header-align="center">
+            <template scope="scope">
+              <el-checkbox-group v-model="scope.row.auth">
+                <el-checkbox :label="item" v-for="item in scope.row.auth" disabled
+                             style="margin-left: 10px;"></el-checkbox>
+              </el-checkbox-group>
+            </template>
+          </el-table-column>
+          <el-table-column label="申请时间" prop="applyTime" align="center"></el-table-column>
+          <el-table-column label="申请理由" prop="reason" align="center"></el-table-column>
+          <el-table-column label="操作" align="center">
+            <template scope="scope">
+              <el-button type="primary" size="mini" @click="authPass(scope.row, false)">审核通过</el-button>
+              <el-button type="warning" size="mini" @click="authReject(scope.row, false)">审核驳回</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-tab-pane>
-      <el-tab-pane label="操作权限" name="second">
+
+      <!--操作权限-->
+      <el-tab-pane name="operateAuth">
+        <span slot="label">
+          <el-badge :value="newMsg.arvOpt" class="item" size="small">
+            <div style="margin: -10px 0;">操作权限</div>
+          </el-badge>
+        </span>
         <div class="operate-auth">
-          <el-table :data="operateAuthData" border style="width: 100%">
-            <el-table-column label="选项" align="center" width="50">
-              <template scope="scope">
-                <el-checkbox></el-checkbox>
-              </template>
-            </el-table-column>
-            <el-table-column label="申请人" prop="applicant" align="center"></el-table-column>
+          <el-table :data="operateAuth" border style="width: 100%" @select="add" @selection-change="handleSelectionChange">
+            <el-table-column label="选项" align="center" width="50" type="selection"></el-table-column>
+            <el-table-column label="申请人" prop="applicant" align="center" width="90"></el-table-column>
             <el-table-column label="申请人角色" prop="role" align="center"></el-table-column>
             <el-table-column label="所属部门" prop="department" align="center"></el-table-column>
             <el-table-column label="游戏" prop="game" align="center"></el-table-column>
@@ -59,28 +64,20 @@
             <el-table-column label="终端" prop="terminal" align="center"></el-table-column>
             <el-table-column label="应用包" prop="appPackage" align="center"></el-table-column>
             <el-table-column label="APPID应用" prop="APPID" align="center"></el-table-column>
-            <el-table-column label="权限内容" align="center">
-              <el-table-column label="权限1" align="center">
-                <template scope="scope">
-                  <el-checkbox>发货退款</el-checkbox>
-                </template>
-              </el-table-column>
-              <el-table-column label="权限2" align="center">
-                <template scope="scope">
-                  <el-checkbox>报警设置</el-checkbox>
-                </template>
-              </el-table-column>
-            </el-table-column>
-            <el-table-column label="申请时间" prop="applicationTime" align="center"></el-table-column>
-            <el-table-column label="申请理由" prop="applicateReason" align="center"></el-table-column>
-            <el-table-column label="操作" prop="operation" align="center" width="180">
+            <el-table-column label="权限内容" align="left" width="240" header-align="center">
               <template scope="scope">
-                <div style="display: inline-block;vertical-align: middle">
-                <el-button type="primary" size="mini">审核通过</el-button>
-              </div>
-              <div style="display: inline-block;vertical-align: middle">
-                <el-button type="warning" size="mini">审核驳回</el-button>
-              </div>
+                <el-checkbox-group v-model="scope.row.auth">
+                  <el-checkbox :label="item" v-for="item in scope.row.auth" disabled
+                               style="margin-left: 10px;"></el-checkbox>
+                </el-checkbox-group>
+              </template>
+            </el-table-column>
+            <el-table-column label="申请时间" prop="applyTime" align="center"></el-table-column>
+            <el-table-column label="申请理由" prop="reason" align="center"></el-table-column>
+            <el-table-column label="操作" align="center" width="180">
+              <template scope="scope">
+                <el-button type="primary" size="mini" @click="authPass(scope.row,false)">审核通过</el-button>
+                <el-button type="warning" size="mini" @click="authReject(scope.row, false)">审核驳回</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -91,36 +88,18 @@
 </template>
 
 <script type="text/ecmascript-6">
+  // import Vue from 'vue';
   export default {
     data () {
       return {
-        activeName: 'first',
-        viewData: [{
-          applicant: 'DJL',
-          role: '管理员',
-          department: '数据支付部',
-          viewAuth: '',
-          applicationTime: '2017-02-27',
-          applicateReason: '想做更好'
-        }],
-        operateAuthData: [{
-          applicant: 'DJL',
-          role: '管理员',
-          department: '数据支付部',
-          game: '地方棋牌',
-          platform: '四川',
-          hall: '全部',
-          terminal: '全部',
-          appPackage: '全部',
-          APPID: '全部',
-          auth: [{name: 'd', age: 20}],
-          status: '通过',
-          assessor: 'DJLXS',
-          applicationTime: '2017-02-27',
-          applicateReason: '想做更好'
-        }]
+        viewAuth: [],
+        operateAuth: [],
+        currentTab: '',
+        viewAuthSelectList: [],
+        operateAuthSelectList: []
       };
     },
+    props: ['newMsg'],
     methods: {
       reject () {
         this.$confirm('确定删除当前项吗?', '提示', {
@@ -132,6 +111,102 @@
         }).catch(function () {
           console.log('放弃操作');
         });
+      },
+      tabSwitch (tab) {
+        let _this = this;
+        tab.name === 'viewAuth' ? this.newMsg.arvView = 0 : this.newMsg.arvOpt = 0;
+        this.currentTab = tab.name;
+        this.$http.get(`/api/approval/loadData?authType=${tab.name}`).then(response => {
+          _this[tab.name] = response.body.data;
+        }, response => {
+          // error callback
+        });
+      },
+      handleSelectionChange (val) {
+        this.currentTab === 'viewAuth' ? this.viewAuthSelectList = val : this.operateAuthSelectList = val;
+      },
+      add (selection, row) {
+        row.checked = !row.checked;
+      },
+      authPass (data, isBatch) {
+        let _data = {};
+        _data.type = this.currentTab;
+        _data.body = data;
+        // 批量通过
+        if (isBatch) {
+          if (!data.length) {
+            this.$message({
+              message: '请至少选择一项',
+              type: 'warning'
+            });
+            return;
+          }
+          this.$http.post(`/api/approval/passBatch`, _data).then(response => {
+            // 根据状态值判断，进行相关操作
+          }, response => {
+            // error callback
+          });
+        } else {
+          if (!data.checked) {
+            this.$message({
+              message: '请选择当前项',
+              type: 'warning'
+            });
+            return;
+          }
+          this.$http.post(`/api/approval/passOne`, _data).then(response => {
+            // 根据状态值判断，进行相关操作
+          }, response => {
+            // error callback
+          });
+        }
+      },
+      authReject (data, isBatch) {
+        let _data = {};
+        _data.type = this.currentTab;
+        _data.body = data;
+        if (isBatch) {
+          if (!data.length) {
+            this.$message({
+              message: '请至少选择一项',
+              type: 'warning'
+            });
+            return;
+          }
+          this.$http.post(`/api/approval/rejectBatch`, _data).then(response => {
+            // 根据状态值判断，进行相关操作
+          }, response => {
+            // error callback
+          });
+        } else {
+          if (!data.checked) {
+            this.$message({
+              message: '请选择当前项',
+              type: 'warning'
+            });
+            return;
+          }
+          this.$http.post(`/api/approval/rejectOne`, _data).then(response => {
+            // 根据状态值判断，进行相关操作
+          }, response => {
+            // error callback
+          });
+        }
+      }
+    },
+    created () {
+      let _this = this;
+      this.currentTab = 'viewAuth';
+      // 加载viewAuth
+      this.$http.get('/api/approval/loadData?authType=viewAuth').then(response => {
+        _this.viewAuth = response.body.data;
+      }, response => {
+        // error callback
+      });
+    },
+    computed: {
+      multipleSelection () {
+        return this.currentTab === 'viewAuth' ? this.viewAuthSelectList : this.operateAuthSelectList;
       }
     }
   };

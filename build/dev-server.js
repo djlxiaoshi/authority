@@ -35,9 +35,20 @@ var authApplyData = require('../src/mock/applyAuthData.json');
 var menuData = authApplyData.parentMenu;
 
 // 我的权限数据
-var myAuthData = require('../src/mock/myauth.json').authData;
+var myAuthData = require('../src/mock/myauth.json');
+
+// 我的审批  数据
+var approvalData = require('../src/mock/approval.json');
 
 var apiRoutes = express.Router();
+
+// 获取  我的权限  和 我的审批中的 新消息数目
+apiRoutes.get('/app/newMsg', function (req, res) {
+  res.json({
+    errno: 0
+  });
+});
+
 
 apiRoutes.get('/apply/userMsg', function (req, res) {
   res.json({
@@ -78,20 +89,19 @@ apiRoutes.post('/apply/subOpt', function (req, res) {
   res.json({
     errno: 0
   });
-  console.dir(req.body);
+  // console.dir(req.body); // 打印筛选条件
 });
 
-apiRoutes.get('/myAuthData', function (req, res) {
+apiRoutes.get('/myAuth/', function (req, res) {
   var params = url.parse(req.url, true).query;
-  var _authType = params.authType;
-  console.log(_authType)
+  var authType = params.authType;
   res.json({
     errno: 0,
-    data: myAuthData[_authType]
+    data: myAuthData[authType]
   });
 });
 
-apiRoutes.get('/withdraw', function (req, res) {
+apiRoutes.get('/myAuth/withdraw', function (req, res) {
   var params = url.parse(req.url, true).query;
   var _authType = params.authType;
   var uuid = params.uuid;
@@ -103,9 +113,9 @@ apiRoutes.get('/withdraw', function (req, res) {
   });
 });
 
-apiRoutes.get('/searchData', function (req, res) {
+apiRoutes.get('/myAuth/search', function (req, res) {
   var params = url.parse(req.url, true).query;
-  var _tagType = params.tagType;
+  var _tagType = params.searchType;
   var _searchKey = params.searchKey;
   // 接下来执行数据库查询操作
   console.log('tagType:' + _tagType + 'searchKey:' + _searchKey);
@@ -132,13 +142,49 @@ apiRoutes.get('/searchData', function (req, res) {
   });
 });
 
-apiRoutes.get('/dataNum', function (req, res) {
+/****************approvalData***********************/
+apiRoutes.get('/approval/loadData', function (req, res) {
+  var params = url.parse(req.url, true).query;
+  var _authType = params.authType;
   res.json({
     errno: 0,
-    data: {
-      pendingNum: !_u.isEmpty(myAuthData.pendingAuth) ? myAuthData.pendingAuth.viewAuth.length + myAuthData.pendingAuth.operateAuth.length : 0,
-      rejectNum: !_u.isEmpty(myAuthData.rejectAuth) ? myAuthData.rejectAuth.viewAuth.length + myAuthData.rejectAuth.operateAuth.length : 0
-    }
+    data: approvalData[_authType]
+  });
+});
+
+// 通过一条
+apiRoutes.post('/approval/passOne', function (req, res) {
+  console.log('通过一条');
+  console.log(req.body);
+  res.json({
+    errno: 0
+  });
+});
+
+// 批量通过
+apiRoutes.post('/approval/passBatch', function (req, res) {
+  console.log('批量通过');
+  console.log(req.body);
+  res.json({
+    errno: 0
+  });
+});
+
+// 驳回一条
+apiRoutes.post('/approval/rejectOne', function (req, res) {
+  console.log('驳回一条');
+  console.log(req.body);
+  res.json({
+    errno: 0
+  });
+});
+
+// 批量驳回
+apiRoutes.post('/approval/rejectBatch', function (req, res) {
+  console.log('批量驳回');
+  console.log(req.body);
+  res.json({
+    errno: 0
   });
 });
 
