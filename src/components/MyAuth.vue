@@ -296,7 +296,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/css/common.styl"
+  @import "../common/css/common.styl"
   .my-auth-wrap
     .own-auth
       h4

@@ -53,7 +53,8 @@
           </el-badge>
         </span>
         <div class="operate-auth">
-          <el-table :data="operateAuth" border style="width: 100%" @select="add" @selection-change="handleSelectionChange">
+          <el-table :data="operateAuth" border style="width: 100%" @select="add"
+                    @selection-change="handleSelectionChange">
             <el-table-column label="选项" align="center" width="50" type="selection"></el-table-column>
             <el-table-column label="申请人" prop="applicant" align="center" width="90"></el-table-column>
             <el-table-column label="申请人角色" prop="role" align="center"></el-table-column>
@@ -134,6 +135,12 @@
           });
           this.$http.post(`/api/approval/passBatch`, _data).then(response => {
             // 根据状态值判断，进行相关操作
+            if (response.body.errno === 0) {
+              this.$message({
+                message: '通过申请',
+                type: 'success'
+              });
+            }
           }, response => {
             // error callback
           });
@@ -148,6 +155,12 @@
           _data.id = data.uuid;
           this.$http.post(`/api/approval/passOne`, _data).then(response => {
             // 根据状态值判断，进行相关操作
+            if (response.body.errno === 0) {
+              this.$message({
+                message: '通过申请',
+                type: 'success'
+              });
+            }
           }, response => {
             // error callback
           });
@@ -169,6 +182,12 @@
           });
           this.$http.post(`/api/approval/rejectBatch`, _data).then(response => {
             // 根据状态值判断，进行相关操作
+            if (response.body.errno === 0) {
+              this.$message({
+                message: '驳回成功',
+                type: 'success'
+              });
+            }
           }, response => {
             // error callback
           });
@@ -183,6 +202,12 @@
           _data.id = data.uuid;
           this.$http.post(`/api/approval/rejectOne`, _data).then(response => {
             // 根据状态值判断，进行相关操作
+            if (response.body.errno === 0) {
+              this.$message({
+                message: '驳回成功',
+                type: 'success'
+              });
+            }
           }, response => {
             // error callback
           });
@@ -208,7 +233,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import '../../common/css/common.styl'
+  @import '../common/css/common.styl'
   .my-appoval
     .batch-operate
       display: inline-block

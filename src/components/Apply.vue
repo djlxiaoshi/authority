@@ -66,8 +66,7 @@
       <el-tab-pane label="操作权限" name="second">
         <!--权限选择器-->
         <div class="select-auth-wrap">
-          <!--<Select-auth parent-router="home"></Select-auth>-->
-          <select-auth3 v-on:addSelData="addSelData"></select-auth3>
+          <select-auth v-on:addSelData="addSelData"></select-auth>
         </div>
         <!--待添加权限-->
         <div class="add-auth-wrap">
@@ -193,9 +192,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import SelectAuth from 'components/SelectAuth/SelectAuth';
-  import SelectAuth2 from 'components/SelectAuth/SelectAuth2';
-  import SelectAuth3 from 'components/SelectAuth/SelectAuth3';
+  import SelectAuth from 'components/SelectAuth';
   export default {
     data () {
       return {
@@ -210,9 +207,7 @@
       };
     },
     components: {
-      SelectAuth,
-      SelectAuth2,
-      SelectAuth3
+      SelectAuth
     },
     methods: {
       showMore () {
@@ -370,7 +365,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/css/table.min.css"
+  @import "../common/css/table.min.css"
   .auth-application
     width: 1200px
     margin: 0 auto

@@ -12,33 +12,33 @@
       </div>
       <div class="box-body">
         <ul class="left-part">
-          <li @click="switchMenu($event,0)" :class="{active: changeFlag === 0}"><a href="javascript:void(0)">请选择游戏</a>
+          <li @click="switchMenu($event,index)" :class="{active: changeFlag === index}" v-for="(item, index) in menuData"><a href="javascript:void(0)">请选择{{item.labelName}}</a>
           </li>
-          <li @click="switchMenu($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择平台</a>
-          </li>
-          <li @click="switchMenu($event,2)" :class="{active: changeFlag === 2}"><a href="javascript:void(0)">请选择大厅</a>
-          </li>
-          <li @click="switchMenu($event,3)" :class="{active: changeFlag === 3}"><a href="javascript:void(0)">请选择终端</a>
-          </li>
-          <li @click="switchMenu($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择应用包</a>
-          </li>
-          <li @click="switchMenu($event,5)" :class="{active: changeFlag === 5}"><a
-            href="javascript:void(0)">请选择APPID</a>
-          </li>
+          <!--<li @click="switchMenu($event,1)" :class="{active: changeFlag === 1}"><a href="javascript:void(0)">请选择平台</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,2)" :class="{active: changeFlag === 2}"><a href="javascript:void(0)">请选择大厅</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,3)" :class="{active: changeFlag === 3}"><a href="javascript:void(0)">请选择终端</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,4)" :class="{active: changeFlag === 4}"><a href="javascript:void(0)">请选择应用包</a>-->
+          <!--</li>-->
+          <!--<li @click="switchMenu($event,5)" :class="{active: changeFlag === 5}"><a-->
+            <!--href="javascript:void(0)">请选择APPID</a>-->
+          <!--</li>-->
         </ul>
         <div class="right-part">
           <div class="data-list">
             <div v-show="changeFlag === index" v-for="(item, index) in authSelect">
-              <el-checkbox :indeterminate="isIndeterminate(index, serviceData[index])"
+              <el-checkbox :indeterminate="isIndeterminate(index, filterData)"
                            v-model="authSelect[index]['isAll']"
-                           @change="handleCheckAllChange($event, serviceData[index], authSelect[index])">全选/全不选
+                           @change="handleCheckAllChange($event, filterData, authSelect[index])">全选/全不选
               </el-checkbox>
               <div class="select-auth-input">
                 <el-input placeholder="请输入关键词" icon="search" v-model="input"></el-input>
               </div>
               <el-checkbox-group v-model="authSelect[index]['checked']"
-                                 @change="handleCheckedCitiesChange(serviceData[index], authSelect[index])">
-                <div v-for="item in serviceData[index]" v-show="result(item)">
+                                 @change="handleCheckedCitiesChange(filterData, authSelect[index])">
+                <div v-for="item in subOpt" v-show="result(item)">
                   <el-checkbox :label="item"></el-checkbox>
                 </div>
               </el-checkbox-group>
@@ -54,55 +54,20 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import allAPPID from 'mock/appid.json';
-  const gameType = ['德州扑克', '斗地主', '地方棋牌', '印尼棋牌', 'IPOKER', '四人斗地主', '三公', '麻将', '博定'];
-  const platformType = ['全国平台', '湖北平台', '四川平台', '深圳平台', '广东平台', '海南平台', '澳门平台', '宜宾平台', '宜昌平台', '其他平台'];
-  const hallType = ['三人厅', '四人厅', '五人厅', '六人厅', '七人厅', '八人厅', '九人厅', '十人厅', '更大厅'];
-  const terminalType = ['IOS', 'PC', 'ANDRIOD'];
-  const appPackageType = ['360', '新浪', '腾讯'];
-  const appidType = ['德州扑克-PC-新浪微博-简体（1232）', '德州扑克-ANDROID-VIVO联运-简体（1333）', '德州扑克-ANDROID-华为联运-简体（1235）', '德州扑克-ANDROID-主版本-简体（1499）', '德州扑克-PC-新浪微博-简体（1432）', '德州扑克-ANDROID-VIVO联运-简体（1353）', '德州扑克-ANDROID-华为联运-简体（1455）'];
-
   export default {
     data () {
       return {
+        // 双向绑定搜索框
         input: '',
         changeFlag: 0,
         showSelectAuthBox: false,
-        serviceData: [gameType, platformType, hallType, terminalType, appPackageType, appidType],
-        selectedCondition: {
-          game: [],
-          platform: [],
-          hall: [],
-          terminal: [],
-          appPackage: [],
-        },
-        filterAPPID: [],
-        authSelect: [
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          },
-          {
-            'checked': [],
-            'isAll': false
-          }
-        ]
+        menuData: [],
+        // 通过上级选择后的筛选信息
+        filterData: {},
+        subOpt: [],
+        lastFilterMsg: false,
+        // 多选框，V-model双向绑定队列
+        authSelect: []
       };
     },
     methods: {
@@ -110,28 +75,30 @@
         this.showSelectAuthBox = !this.showSelectAuthBox;
       },
       switchMenu ($event, num) {
-
-        // 列表刷新，这里要根据其他选择（index）改变右边对应的列表
-        let _filterAPPID = [];
-        this.selectedCondition = this.authSelect[num]['checked'];
-        if (this.selectedCondition.length === 0 || this.selectedCondition.length === this.serviceData[num].length) {
-          _filterAPPID = this.serviceData[num];
-        } else {
-          this.selectedCondition.forEach((item, index) => {
-            allAPPID.forEach((value) => {
-              if (value.indexOf(item)) {
-                _filterAPPID.push(value);
-              }
-            });
-          });
-        }
-
-        this.filterAPPID = _filterAPPID;
+        // let _this = this;
+        // 传给后台的信息
+        let _filterData = {};
 
         $event.target.style.background = 'lightgreeen';
         this.changeFlag = num;
         this.input = '';
 
+        _filterData.currentMenu = {
+          'parentMenuId': this['menuData'][num]['menuId'],
+          'parentMenuName': this['menuData'][num]['menuName']
+        };
+
+        _filterData.filterMsg = this.authSelect;
+
+        console.log('打印选择器需要传到后台的数据');
+        console.dir(_filterData);
+
+        // 后台获取数据,目前无数据，要后台给
+        this.$http.post('/api/apply/subOpt', _filterData).then(response => {
+          // _this.subOpt = response.body.data;
+        }, response => {
+          // error callback
+        });
       },
       handleCheckAllChange ($event, selectType, authItem) {
         authItem['checked'] = $event.target.checked ? selectType : [];
@@ -146,7 +113,7 @@
         return !this.input.trim() || item.toUpperCase().indexOf(this.input.trim().toUpperCase()) > -1;
       },
       clearAll () {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        this.$confirm('确定要清空所有吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -163,17 +130,15 @@
       },
       addSelect () {
         // 判断是否填写完整
-        let _msg = ['游戏', '平台', '大厅', '终端', '应用包', 'APPID'];
-        let _data = this.authSelect;
-        for (let index = 0; index < _data.length; index++) {
-          if (_data[index]['checked'].length === 0) {
-            this.$message({
-              message: `请至少选择一种${_msg[index]}`,
-              type: 'warning'
-            });
-            return;
-          }
+        let _appidData = this.authSelect.slice(-1);
+        if (_appidData[0]['checked']['length'] === 0) {
+          this.$message({
+            message: '请至少选择一种APPID',
+            type: 'warning'
+          });
+          return;
         }
+
         // 触发父组件事件
         this.$emit('addSelData', this.authSelect);
         // 所有复选框复位
@@ -186,12 +151,49 @@
       }
     },
     computed: {},
-    props: ['parentRouter']
+    props: ['parentRouter'],
+    created () {
+      // 保存this指针
+      let _this = this;
+      let _filterData = {};
+      // 发送ajax请求，获取菜单选项
+      this.$http.get('/api/apply/parentMenu').then(response => {
+        // 拿到菜单数据
+        _this.menuData = response.body.data;
+        console.log('父级菜单信息');
+        console.log(this.menuData);
+        // 动态创建选中状态队列
+        _this.menuData.forEach((value) => {
+          // 每一个v-model绑定对象初始化,这里要循环创建，不然是按引用传递，会相互影响
+          let _checkedItem = {};
+          _checkedItem.checked = [];
+          _checkedItem.isAll = false;
+          _checkedItem.menuName = value.menuName;
+          _this.authSelect.push(_checkedItem);
+        });
+      }, response => {
+        // error callback
+      }).then(response => {
+        _filterData.currentMenu = {
+          'parentMenuId': _this['menuData'][0]['menuId'],
+          'parentMenuName': _this['menuData'][0]['menuName']
+        };
+        _filterData.filterMsg = _this.authSelect;
+        // 发送ajax请求，后台提取数据
+        _this.$http.post('/api/apply/subOpt', _filterData).then(response => {
+          _this.subOpt = response.body.data;
+        }, response => {
+          // error callback
+        });
+      });
+    },
+    watch: {
+    }
   };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/css/common.styl"
+  @import "../common/css/common.styl"
   .select-application
     position: relative
     .please-select
