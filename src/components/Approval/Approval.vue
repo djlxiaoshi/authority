@@ -101,17 +101,6 @@
     },
     props: ['newMsg'],
     methods: {
-      reject () {
-        this.$confirm('确定删除当前项吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(function () {
-          console.log('批量驳回');
-        }).catch(function () {
-          console.log('放弃操作');
-        });
-      },
       tabSwitch (tab) {
         let _this = this;
         tab.name === 'viewAuth' ? this.newMsg.arvView = 0 : this.newMsg.arvOpt = 0;
@@ -131,7 +120,6 @@
       authPass (data, isBatch) {
         let _data = {};
         _data.type = this.currentTab;
-        _data.body = data;
         // 批量通过
         if (isBatch) {
           if (!data.length) {
@@ -141,6 +129,9 @@
             });
             return;
           }
+          _data.idList = data.map((item) => {
+            return item.uuid;
+          });
           this.$http.post(`/api/approval/passBatch`, _data).then(response => {
             // 根据状态值判断，进行相关操作
           }, response => {
@@ -154,6 +145,7 @@
             });
             return;
           }
+          _data.id = data.uuid;
           this.$http.post(`/api/approval/passOne`, _data).then(response => {
             // 根据状态值判断，进行相关操作
           }, response => {
@@ -164,7 +156,6 @@
       authReject (data, isBatch) {
         let _data = {};
         _data.type = this.currentTab;
-        _data.body = data;
         if (isBatch) {
           if (!data.length) {
             this.$message({
@@ -173,6 +164,9 @@
             });
             return;
           }
+          _data.idList = data.map((item) => {
+            return item.uuid;
+          });
           this.$http.post(`/api/approval/rejectBatch`, _data).then(response => {
             // 根据状态值判断，进行相关操作
           }, response => {
@@ -186,6 +180,7 @@
             });
             return;
           }
+          _data.id = data.uuid;
           this.$http.post(`/api/approval/rejectOne`, _data).then(response => {
             // 根据状态值判断，进行相关操作
           }, response => {
